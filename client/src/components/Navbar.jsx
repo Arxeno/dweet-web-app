@@ -1,7 +1,9 @@
 const Navbar = () => {
 	return (
 		<nav>
-			Navbar
+			Dweet
+
+			<div>raisyam</div>
 		</nav>
 	);
 }
