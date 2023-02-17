@@ -41,13 +41,13 @@ module.exports = {
 			filename: 'index.html',
 			template: path.join(__dirname, 'client', 'public', 'index.html'),
 		}),
-		// new CopyWebpackPlugin({
-		//	 patterns: [
-		//		 {
-		//			 from: path.resolve(__dirname, 'client', 'public', 'assets'),
-		//			 to: path.resolve(__dirname, 'dist'),
-		//		 },
-		//	 ],
-		// }),
+		new CopyWebpackPlugin({
+			 patterns: [
+				 {
+					 from: path.resolve(__dirname, 'client', 'public', 'assets'),
+					 to: path.resolve(__dirname, 'dist'),
+				 },
+			 ],
+		}),
 	],
 };

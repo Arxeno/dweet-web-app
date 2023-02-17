@@ -1,7 +1,10 @@
+import UserTweet from '../components/UserTweet'
+
 const Home = () => {
 	return (
-		<div>
-			Home Page
+		<div id="home-page">
+			<UserTweet id="user-tweet"/>
+			<div></div>
 		</div>
 	);
 }
