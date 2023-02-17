@@ -270,3 +270,48 @@ nav#header-nav {
 		}
 	}
 }
+
+#login-page {
+	width: 500px;
+	display: grid;
+	place-items: center;
+	margin: 30px auto;
+
+	#login-component {
+		background: white;
+		padding: 10px;
+
+		div {
+			margin: 10px auto;
+
+			input {
+				width: 100%;
+				border: $black-border;
+				border-radius: 15px;
+				font-size: 1.3rem;
+				padding: 10px;
+				transition: box-shadow .25s ease-out;
+			}
+
+			input:focus {
+				outline: none;
+				box-shadow: 3px 3px black;
+			}
+		}
+
+		button {
+			margin: 10px auto;
+			width: 100%;
+		}
+
+		hr {
+			border: $black-border;
+			border-width: 2px;
+		}
+
+		p {
+			text-align: center;
+			margin-top: 10px;
+		}
+	}
+}
