@@ -1,8 +1,8 @@
-const LogIn = () => {
+const SignUp = () => {
 	return (
 		<div id="login-signup-page">
 			<div id="login-signup-component" className="shadow-effect">
-				<h3>Log In</h3>
+				<h3>Sign Up</h3>
 
 				<div>
 					<h4>Username</h4>
@@ -14,14 +14,14 @@ const LogIn = () => {
 					<input type="password"/>
 				</div>
 
-				<button className="button-effect button-yellow">Log In</button>
+				<button className="button-effect button-yellow">Sign Up</button>
 
 				<hr />
 
-				<p>Need an account? <a href="/signup">Sign Up</a></p>
+				<p>Already a user? <a href="/login">Log In</a></p>
 			</div>
 		</div>
 	)
 }
 
-export default LogIn
+export default SignUp

@@ -183,7 +183,17 @@ nav#header-nav {
 			padding: 10px;
 			font-family: "Prompt", cursive;
 			font-size: 1rem;
-			box-shadow: 2px 2px black;
+			position: relative;
+			bottom: 0;
+			right: 0;
+			transition: 0.25s ease-out;
+		}
+
+		#tweet-textarea:focus {
+			outline: none;
+			box-shadow: 3px 3px black;
+			bottom: 3px;
+			right: 3px;
 		}
 
 		#user-tweet-buttons {
@@ -271,13 +281,13 @@ nav#header-nav {
 	}
 }
 
-#login-page {
+#login-signup-page {
 	width: 500px;
 	display: grid;
 	place-items: center;
 	margin: 30px auto;
 
-	#login-component {
+	#login-signup-component {
 		background: white;
 		padding: 10px;
 
@@ -290,12 +300,18 @@ nav#header-nav {
 				border-radius: 15px;
 				font-size: 1.3rem;
 				padding: 10px;
-				transition: box-shadow .25s ease-out;
+				transition: .25s ease-out;
+				position: relative;
+				bottom: 0;
+				right: 0;
 			}
 
 			input:focus {
 				outline: none;
 				box-shadow: 3px 3px black;
+				bottom: 3px;
+				right: 3px;
+				background: $yellow;
 			}
 		}
 
