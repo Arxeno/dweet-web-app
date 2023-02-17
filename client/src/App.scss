@@ -54,6 +54,8 @@ span.emoji {
 
 nav#header-nav {
 	position: sticky;
+	top: 0;
+	left: 0;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
@@ -178,7 +180,7 @@ nav#header-nav {
 			border-radius: 10px;
 			border: $black-border;
 			resize: none;
-			padding: 3px;
+			padding: 10px;
 			font-family: "Prompt", cursive;
 			font-size: 1rem;
 			box-shadow: 2px 2px black;
@@ -221,6 +223,8 @@ nav#header-nav {
 
 	button {
 		grid-area: delete;
+		background: $red;
+		// display: none;
 
 		.emoji {
 			font-size: 1.5rem;
@@ -236,4 +240,33 @@ nav#header-nav {
 	box-shadow: 15px 10px black;
 	border: $black-border;
 	border-radius: 15px;
+}
+
+#profile-page {
+	width: 600px;
+	margin: 20px auto;
+	display: grid;
+	grid-template-columns: 1fr;
+	justify-content: center;
+	row-gap: 15px;
+
+	#big-account {
+		display: flex;
+		flex-direction: row;
+		text-decoration: none;
+
+		img {
+			height: 80px;
+			width: 80px;
+			border-radius: 100%;
+			border: $black-border;
+		}
+
+		#big-username {
+			line-height: 80px;
+			margin-left: 7px;
+			color: black;
+			font-size: 2rem;
+		}
+	}
 }

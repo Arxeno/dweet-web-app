@@ -1,15 +1,21 @@
 import Account from './Account'
 
-const Tweet = () => {
+const Tweet = ({ imagePhoto, userName, date, text, displayNone }) => {
+	if (displayNone) {
+		let displayStyle = 'none'
+	} else {
+		let displayStyle = 'block'
+	}
+
 	return (
 		<div className="tweet shadow-effect">
-			<Account imagePhoto="images/profile_picture.jpg" userName="raisyam" />
-			<div class="date">17-02-2023</div>
-			<button title="delete tweet" className="button-effect">
+			<Account imagePhoto={imagePhoto} userName={userName} />
+			<div class="date">{date}</div>
+			<button title="delete tweet" className="button-effect" style={displayNone? {display: 'none'} : {display: 'block'}}>
 				<span className="emoji">🗑</span>
 			</button>
 			<p className="tweet-text">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam erat magna, egestas feugiat eleifend ac, iaculis vel tellus. Integer non lectus nulla.
+				{text}
 			</p>
 		</div>
 	)
