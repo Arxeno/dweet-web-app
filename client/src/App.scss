@@ -28,6 +28,10 @@ body {
   min-height: 100vh;
 }
 
+span.emoji {
+	font-family: "Segoe UI Emoji";
+}
+
 /*
   SCROLLBAR
 */
@@ -72,23 +76,23 @@ nav#header-nav {
 		background: $yellow;
 		display: none;
 	}
+}
 
-	#account-nav {
-		display: flex;
-		flex-direction: row;
-		text-decoration: none;
+.account {
+	display: flex;
+	flex-direction: row;
+	text-decoration: none;
 
-		img {
-			height: 58px;
-			border-radius: 100%;
-			border: $black-border;
-		}
+	img {
+		height: 58px;
+		border-radius: 100%;
+		border: $black-border;
+	}
 
-		#username-nav {
-			line-height: 58px;
-			margin-left: 7px;
-			color: black;
-		}
+	.username {
+		line-height: 58px;
+		margin-left: 7px;
+		color: black;
 	}
 }
 
@@ -193,4 +197,43 @@ nav#header-nav {
 			}
 		}
 	}
+}
+
+.tweet {
+	background: white;
+	margin: 20px auto;
+	padding: 10px;
+	display: grid;
+	grid-template-areas: "account date delete" "tweet-text tweet-text tweet-text";
+	grid-template-columns: auto 1fr auto;
+	column-gap: 7px;
+	row-gap: 7px;
+
+	.account {
+		grid-area: account;
+		width: fit-content;
+	}
+
+	.date {
+		grid-area: date;
+		line-height: 58px;
+	}
+
+	button {
+		grid-area: delete;
+
+		.emoji {
+			font-size: 1.5rem;
+		}
+	}
+
+	p.tweet-text {
+		grid-area: tweet-text;
+	}
+}
+
+.shadow-effect {
+	box-shadow: 15px 10px black;
+	border: $black-border;
+	border-radius: 15px;
 }
