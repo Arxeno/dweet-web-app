@@ -1,0 +1,59 @@
+db.users.insertOne({
+	_id: 1,
+	profilePhoto: 'raisyam.jpg',
+	name: 'raisyam',
+	password: 'halo123'
+})
+
+db.users.insertOne({
+	_id: 2,
+	profilePhoto: 'masbro.jpg',
+	name: 'masbro',
+	password: 'simasbro'
+})
+
+db.users.insertOne({
+	_id: 3,
+	profilePhoto: 'johncena.jpg',
+	name: 'johncena',
+	password: 'youcantseeme'
+})
+
+db.tweets.insertMany([
+	{
+		_id: 1,
+		tweets: [
+			{
+				date: '17-02-2023',
+				tweet: 'keren masbro'
+			},
+			{
+				date: '17-02-2023',
+				tweet: 'ada ada aja si masbro'
+			},
+			{
+				date: '17-02-2023',
+				tweet: 'aduh si masbro'
+			}
+		]
+	},
+
+	{
+		_id: 2,
+		tweets: [
+			{
+				date: '17-02-2023',
+				tweet: 'Dweet RISTEK is dope 🔥!'
+			},
+			{
+				date: '17-02-2023',
+				tweet: 'otw masbro'
+			}
+		]
+	},
+
+	{
+		_id: 3,
+		tweets: []
+	}
+])

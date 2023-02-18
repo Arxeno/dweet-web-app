@@ -18,14 +18,14 @@ const Profile = () => {
     	</p>
     	<div id="tweets-container">
 				<Tweet
-					imagePhoto="https://www.rainforest-alliance.org/wp-content/uploads/2021/06/capybara-square-1.jpg.optimal.jpg"
+					imagePhoto="images/masbro.jpg"
 					userName="masbro"
 					date="17-02-2023"
 					text="Dweet RISTEK is dope 🔥!"
 					displayNone={false}
 				/>
 				<Tweet
-					imagePhoto="https://www.rainforest-alliance.org/wp-content/uploads/2021/06/capybara-square-1.jpg.optimal.jpg"
+					imagePhoto="images/masbro.jpg"
 					userName="masbro"
 					date="17-02-2023"
 					text="Keren masbro"

@@ -53,6 +53,7 @@ span.emoji {
 }
 
 nav#header-nav {
+	z-index: 10;
 	position: sticky;
 	top: 0;
 	left: 0;
@@ -306,12 +307,31 @@ nav#header-nav {
 				right: 0;
 			}
 
-			input:focus {
+			input:not([type="file"]):focus {
 				outline: none;
 				box-shadow: 3px 3px black;
 				bottom: 3px;
 				right: 3px;
 				background: $yellow;
+			}
+
+			input[type="file"]:hover {
+				outline: none;
+				box-shadow: 3px 3px black;
+				bottom: 3px;
+				right: 3px;
+			}
+
+			input::-webkit-file-upload-button {
+				background: $yellow;
+				border: $black-border;
+				border-radius: 10px;
+			}
+
+			input::file-selector-button {
+				background: $yellow;
+				border: $black-border;
+				border-radius: 10px;
 			}
 		}
 
@@ -329,5 +349,13 @@ nav#header-nav {
 			text-align: center;
 			margin-top: 10px;
 		}
+	}
+
+	#warning-signup {
+		background: $red;
+		margin-top: 30px;
+		width: 80%;
+		max-width: 400px;
+		padding: 10px;
 	}
 }
