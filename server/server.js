@@ -60,6 +60,7 @@ const User = mongoose.model('users', userSchema);
 
 // collection: tweets
 const oneTweetSchema = new mongoose.Schema({
+  name: String,
   date: String,
   tweet: String,
 });
@@ -121,7 +122,7 @@ app.get('/tweet', (req, res) => {
       // console.log(tweets.tweets.length);
       // console.log('------');
       if (tweets.tweets.length > 0) {
-        console.log(tweets.tweets.length);
+        // console.log(tweets.tweets.length);
         // console.log();
         tweets.tweets.forEach((tweet) => {
           allTweetsList.push(tweet);
@@ -145,8 +146,12 @@ app.get('/tweet', (req, res) => {
 app.get('/tweet/:userName', (req, res) => {
   // res.send(req.params.userName)
   const { userName } = req.params;
+  // res.send('hello');
 
   User.findOne({ name: userName }, '_id', (err, id) => {
+    console.log('TWEET ID');
+    console.log(id);
+
     Tweet.findOne({ _id: id }, (err, tweets) => {
       res.json(tweets);
     });
@@ -198,4 +203,42 @@ app.post('/register', (req, res) => {
       });
     }
   });
+});
+
+app.post('/tweet/:userName', (req, res) => {
+  const { userName } = req.params;
+
+  // kalau nama user tidak tersedia di database, send error message
+  User.findOne({ name: userName }, '_id', (err, id) => {
+    // console.log(id);
+
+    // get user's tweets data
+    Tweet.findOne({ _id: id }, 'tweets', (err, tweets) => {
+      const { name, date, tweet } = req.body;
+
+      console.log(req.body);
+      console.log(tweets);
+
+      // add new tweet
+      tweets.tweets.push({
+        name: name,
+        date: date,
+        tweet: tweet,
+      });
+
+      console.log('after push');
+      console.log(tweets);
+
+      // update user's tweet data
+      Tweet.updateOne({ _id: id }, { tweets: tweets.tweets }, (err, docs) => {
+        if (err) {
+          console.log('add tweet error');
+        } else {
+          console.log('successfully add tweet');
+        }
+      });
+    });
+  });
+
+  // kalau ada, posting
 });

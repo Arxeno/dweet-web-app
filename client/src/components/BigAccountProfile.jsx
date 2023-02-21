@@ -1,10 +1,12 @@
-const BigAccountProfile = ({ imagePhoto, userName }) => {
-	return (
-		<a id="big-account" href={`/${userName}`}>
-			<img src={imagePhoto} />
-			<h3 id="big-username">{userName}</h3>
-		</a>
-	)
-}
+import CONFIG from '../config';
 
-export default BigAccountProfile
+const BigAccountProfile = ({ imagePhoto, userName }) => {
+  return (
+    <div id="big-account">
+      <img src={`${CONFIG.BACKEND_URL}/photo/${userName}`} />
+      <h3 id="big-username">{userName}</h3>
+    </div>
+  );
+};
+
+export default BigAccountProfile;

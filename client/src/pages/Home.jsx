@@ -12,10 +12,19 @@ const Home = () => {
   console.log(`IS LOGIN -> ${isLogin.state}`);
 
   const getRandomTweetData = async () => {
-    fetch(`${CONFIG.BACKEND_URL}/tweet`)
+    fetch(`${CONFIG.BACKEND_URL}/tweet`, { method: 'GET' })
       .then((response) => response.json())
       .then((responseJson) => setTweets(responseJson))
       .catch((error) => console.error(error));
+  };
+
+  const removeTweetFromHome = (indexDeleted) => {
+    console.log('tweet deleted from home');
+
+    const newTweets = tweets.filter(
+      (currentValue, index) => index != indexDeleted
+    );
+    setTweets(newTweets);
   };
 
   useEffect(() => {
@@ -26,8 +35,11 @@ const Home = () => {
     <div>
       <Navbar />
       <div id="home-page">
-        <UserTweet id="user-tweet" userName={userNameLogin.state} />
-        <Tweets tweets={tweets} />
+        <UserTweet id="user-tweet" />
+        <Tweets
+          tweets={tweets}
+          removeTweet={(index) => removeTweetFromHome(index)}
+        />
         {/* <div id="tweets-container">
           {tweets.map((data) => {
             return (

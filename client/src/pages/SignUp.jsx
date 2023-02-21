@@ -54,7 +54,7 @@ const SignUp = () => {
 
   const [isUsernameEmpty, setIsUsernameEmpty] = useState(true);
   const [isPasswordEmpty, setIsPasswordEmpty] = useState(true);
-  const [isProfilePicEmpty, setIsProfilePicEmpty] = useState(true);
+  // const [isProfilePicEmpty, setIsProfilePicEmpty] = useState(true);
 
   const usernameChange = () => {
     if (document.querySelector('#signup-username').value) {
@@ -74,13 +74,13 @@ const SignUp = () => {
     // console.log(document.querySelector('#signup-password').value)
   };
 
-  const profilePictureChange = () => {
-    if (document.querySelector('#signup-profilepic').files[0]) {
-      setIsProfilePicEmpty(false);
-    } else {
-      setIsProfilePicEmpty(true);
-    }
-  };
+  // const profilePictureChange = () => {
+  //   if (document.querySelector('#signup-profilepic').files[0]) {
+  //     setIsProfilePicEmpty(false);
+  //   } else {
+  //     setIsProfilePicEmpty(true);
+  //   }
+  // };
 
   return (
     <div id="login-signup-page">
@@ -104,12 +104,7 @@ const SignUp = () => {
 
         <div>
           <h4>Profile Picture</h4>
-          <input
-            id="signup-profilepic"
-            type="file"
-            accept="image/jpeg"
-            onChange={profilePictureChange}
-          />
+          <input id="signup-profilepic" type="file" accept="image/jpeg" />
         </div>
 
         <button className="button-effect button-yellow" onClick={signUpClick}>
@@ -123,11 +118,10 @@ const SignUp = () => {
         </p>
       </div>
 
-      {isUsernameEmpty || isPasswordEmpty || isProfilePicEmpty ? (
+      {isUsernameEmpty || isPasswordEmpty ? (
         <div id="warning-signup" className="shadow-effect">
           {isUsernameEmpty ? <p>Username is empty.</p> : null}
           {isPasswordEmpty ? <p>Password is empty.</p> : null}
-          {isProfilePicEmpty ? <p>Profile picture is empty.</p> : null}
         </div>
       ) : null}
     </div>
