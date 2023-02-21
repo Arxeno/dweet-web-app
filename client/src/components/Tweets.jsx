@@ -11,8 +11,8 @@ const Tweets = ({ tweets, removeTweet }) => {
         // console.log(`USERNAME LOGIN ${userNameLogin.state.slice(1)}`);
         // console.log(`DATA.NAME ${data.name}`);
         // console.log(`CONDITION ${data.name == userNameLogin.state.slice(1)}`);
-        // console.log(`OBJECT ID ${data._id}`);
-        // console.log(typeof data._id);
+        console.log(`OBJECT ID ${data._id}`);
+        console.log(typeof data._id);
         // console.log('---------------------');
 
         return (

@@ -29,13 +29,38 @@ const Profile = () => {
       .catch((error) => console.error(error));
   };
 
-  const removeTweetFromProfile = (indexDeleted) => {
+  const fetchDeleteTweet = async (tweetDeleted) => {
+    console.log('FETCH DELETE TWEET');
+    console.log(
+      `${CONFIG.BACKEND_URL}/tweet/${tweetDeleted.name}?id=${tweetDeleted._id}`
+    );
+
+    const options = { method: 'DELETE' };
+
+    fetch(
+      `${CONFIG.BACKEND_URL}/tweet/${tweetDeleted.name}?id=${tweetDeleted._id}`,
+      options
+    );
+  };
+
+  const removeTweetFromProfile = async (indexDeleted) => {
+    console.log('----------------');
     console.log('tweet deleted from profile');
+    // console.log(`TWEET ID: ${tweetId}`);
+    // console.log('----------------');
 
     const newTweets = tweets.filter(
       (currentValue, index) => index != indexDeleted
     );
+
+    const tweetDeletedArray = tweets.filter(
+      (currentValue, index) => index == indexDeleted
+    );
+    const tweetDeleted = tweetDeletedArray[0];
+
     setTweets(newTweets);
+
+    await fetchDeleteTweet(tweetDeleted);
   };
 
   useEffect(() => {

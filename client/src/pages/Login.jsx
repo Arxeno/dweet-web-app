@@ -11,7 +11,7 @@ const LogIn = () => {
   const [isPasswordEmpty, setIsPasswordEmpty] = useState(true);
   const { isLogin, userNameLogin } = useContext(GlobalStateContext);
 
-  console.log(`IS LOGIN -> ${isLogin.state}`);
+  // console.log(`IS LOGIN -> ${isLogin.state}`);
 
   const logInClick = () => {
     const userName = document.querySelector('#login-username').value;

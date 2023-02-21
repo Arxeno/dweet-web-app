@@ -18,13 +18,57 @@ const Home = () => {
       .catch((error) => console.error(error));
   };
 
-  const removeTweetFromHome = (indexDeleted) => {
+  const updateTweets = (newTweet) => {
+    // const newTweets = tweets.unshift(newTweet); // add new tweet at first index
+    // console.log('NEW TWEET');
+    // console.log(tweets);
+    // console.log(newTweet);
+    // console.log(tweets.unshift(newTweet))
+
+    const newTweets = [newTweet].concat(tweets);
+
+    while (newTweets.length > 20) {
+      newTweets.pop();
+    }
+
+    setTweets(newTweets);
+  };
+
+  const fetchDeleteTweet = async (tweetDeleted) => {
+    console.log('FETCH DELETE TWEET');
+    console.log(
+      `${CONFIG.BACKEND_URL}/tweet/${tweetDeleted.name}?id=${tweetDeleted._id}`
+    );
+
+    const options = { method: 'DELETE' };
+
+    fetch(
+      `${CONFIG.BACKEND_URL}/tweet/${tweetDeleted.name}?id=${tweetDeleted._id}`,
+      options
+    );
+  };
+
+  const removeTweetFromHome = async (indexDeleted) => {
+    console.log('----------------');
     console.log('tweet deleted from home');
+    // console.log(`TWEET ID: ${tweetId}`);
+    // console.log('----------------');
 
     const newTweets = tweets.filter(
       (currentValue, index) => index != indexDeleted
     );
+    const tweetDeletedArray = tweets.filter(
+      (currentValue, index) => index == indexDeleted
+    );
+    const tweetDeleted = tweetDeletedArray[0];
+
+    // set tweets to new value in order to reload the new tweets list
     setTweets(newTweets);
+
+    await fetchDeleteTweet(tweetDeleted);
+
+    // console.log(newTweets);
+    // console.log(tweetDeleted);
   };
 
   useEffect(() => {
@@ -35,7 +79,10 @@ const Home = () => {
     <div>
       <Navbar />
       <div id="home-page">
-        <UserTweet id="user-tweet" />
+        <UserTweet
+          id="user-tweet"
+          updateTweets={(element) => updateTweets(element)}
+        />
         <Tweets
           tweets={tweets}
           removeTweet={(index) => removeTweetFromHome(index)}

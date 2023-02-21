@@ -242,3 +242,41 @@ app.post('/tweet/:userName', (req, res) => {
 
   // kalau ada, posting
 });
+
+// DELETE
+app.delete('/tweet/:userName', (req, res) => {
+  const { userName } = req.params;
+  const tweetId = req.query.id;
+
+  console.log(`id query ${tweetId}`);
+  console.log(`username ${userName}`);
+
+  // search user by name to get the id
+  User.findOne({ name: userName }, '_id', (err, id) => {
+    console.log('user find one');
+    console.log(id);
+
+    // use the user id to get the id of tweets
+    Tweet.findOne({ _id: id }, (err, tweets) => {
+      console.log('tweet find one');
+      console.log(tweets.tweets);
+      // console.log(tweetId);
+      console.log('filter-------');
+      // console.log(tweet._id.toString());
+
+      const newTweets = tweets.tweets.filter(
+        (tweet) => tweetId != tweet._id.toString()
+      );
+
+      console.log(newTweets);
+
+      Tweet.updateOne({ _id: id }, { tweets: newTweets }, (err, docs) => {
+        if (err) {
+          console.log('delete tweet error');
+        } else {
+          console.log('successfully delete tweet');
+        }
+      });
+    });
+  });
+});
