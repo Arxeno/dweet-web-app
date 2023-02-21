@@ -1,10 +1,12 @@
-const Account = ({ imagePhoto, userName }) => {
-	return (
-		<a className="account" href={`/${userName}`}>
-			<img src={imagePhoto} />
-			<h3 className="username">{userName}</h3>
-		</a>
-	)
-}
+import { Link } from 'react-router-dom';
 
-export default Account
+const Account = ({ imagePhoto, userName }) => {
+  return (
+    <Link className="account" to={`/${userName.slice(1)}`}>
+      <img src={imagePhoto} />
+      <h3 className="username">{userName}</h3>
+    </Link>
+  );
+};
+
+export default Account;

@@ -1,5 +1,5 @@
 {
-  "name": "Dweet - Developer Tweet",
+  "name": "dweet-developer-tweet",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,18 +7,24 @@
     "build": "webpack --config webpack.prod.js",
     "start-dev": "webpack-dev-server --config webpack.dev.js",
     "server": "node server/server.js",
-    "dev-server": "nodemon server/server.js"
+    "dev-server": "nodemon server/server.js",
+    "lint-client": "eslint ./client"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@reduxjs/toolkit": "^1.9.2",
     "body-parser": "^1.20.1",
+    "cors": "^2.8.5",
     "express": "^4.18.2",
     "mongodb": "^5.0.1",
     "mongoose": "^6.9.2",
+    "multer": "^1.4.5-lts.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.8.1"
+    "react-redux": "^8.0.5",
+    "react-router-dom": "^6.8.1",
+    "redux": "^4.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",

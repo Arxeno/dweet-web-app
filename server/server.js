@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const express = require('express')
 const bodyParser = require('body-parser')
+const cors = require('cors')
 const CONFIG = require('./config.js')
 
 // EXPRESS START
@@ -8,6 +9,13 @@ const PORT = process.env.PORT || 6001
 const app = express()
 
 app.use(bodyParser.json())
+app.use(cors())
+// app.use((req, res, next) => {
+// 	res.setHeader('Access-Control-Allow-Origin', '*')
+// 	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+// 	res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+// 	next()
+// })
 
 
 // MONGODB
@@ -70,6 +78,26 @@ const Tweet = mongoose.model('tweets', tweetsSchema)
 
 
 // EXPRESS API ROUTES
+app.get('/users/:userName/:password', (req, res) => {
+	const { userName, password } = req.params
+
+	User.findOne({ name: userName }, (err, user) => {
+		if (user != null) {
+			if (password == user.password) {
+				res.json({ message: 'Login successful!' })
+			} else {
+				res.status(400).send({
+					message: 'Wrong password!'
+				})
+			}
+		} else {
+			res.status(400).send({
+				message: 'Username unavailable'
+			})
+		}
+	})
+})
+
 app.get('/tweet', (req, res) => {
 	Tweet.find({}, (err, tweetsOfPeople) => {
 		res.json(tweetsOfPeople)
@@ -88,25 +116,13 @@ app.get('/tweet/:userName', (req, res) => {
 })
 
 app.post('/register', (req, res) => {
-	// User.create({
-
-	// })
-
-	// const body = JSON.parse(req.body)
-
-	// console.log(req.body)
-
-	// User.create(req.body)
-	// User.findOne(req.body.name, '_id', (err, data) => {
-	// 	console.log(data)
-	// 	res.send('thanks for register')
-	// })
-
-	// cek duplikasi user
+	// check for duplication
 	User.findOne({ name: req.body.name }, (err, data) => {
 		if (data != undefined && 'name' in data) {
 			if (data.name == req.body.name) {
-				res.send('ERROR: this username is already picked up.')
+				res.status(400).send({
+				   message: 'This username is already picked!'
+				})
 			}
 		} else {
 			// if the name hasn't been picked up, create the user collections and tweets collections
@@ -120,26 +136,10 @@ app.post('/register', (req, res) => {
 					})
 
 					newUserTweet.save().then(() => {
-						res.send('making new data in tweets collection COMPLETE')
+						res.json({ result: 'OK'})
 					})
 				})
 			})
 		}
-
-		// console.log(data.name)
-		// console.log('name' in data)
-		// res.send(data)
 	})
-
-	// const newAccount = new User(req.body)
-	// newAccount.save().then(() => {
-	// 	User.findOne(req.body.name, '_id', (err, data) => {
-	// 		console.log(data)
-
-	// 		res.send(`thanks for register, ${req.body.name}!`)
-	// 	})
-	// })
-
-	// console.log(typeof req.body)
-	// res.send(`thanks for register, ${req.body.name}!`)
 })

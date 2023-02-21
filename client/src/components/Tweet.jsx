@@ -10,7 +10,7 @@ const Tweet = ({ imagePhoto, userName, date, text, displayNone }) => {
 	return (
 		<div className="tweet shadow-effect">
 			<Account imagePhoto={imagePhoto} userName={userName} />
-			<div class="date">{date}</div>
+			<div className="date">{date}</div>
 			<button title="delete tweet" className="button-effect" style={displayNone? {display: 'none'} : {display: 'block'}}>
 				<span className="emoji">🗑</span>
 			</button>
