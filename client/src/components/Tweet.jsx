@@ -1,24 +1,25 @@
-import Account from './Account'
+import Account from './Account';
 
-const Tweet = ({ imagePhoto, userName, date, text, displayNone }) => {
-	if (displayNone) {
-		let displayStyle = 'none'
-	} else {
-		let displayStyle = 'block'
-	}
+const Tweet = ({ imagePhoto, userName, date, text, display }) => {
+  const deleteThisTweet = () => {
+    console.log('DELETE this tweet!');
+  };
 
-	return (
-		<div className="tweet shadow-effect">
-			<Account imagePhoto={imagePhoto} userName={userName} />
-			<div className="date">{date}</div>
-			<button title="delete tweet" className="button-effect" style={displayNone? {display: 'none'} : {display: 'block'}}>
-				<span className="emoji">🗑</span>
-			</button>
-			<p className="tweet-text">
-				{text}
-			</p>
-		</div>
-	)
-}
+  return (
+    <div className="tweet shadow-effect">
+      <Account imagePhoto={imagePhoto} userName={userName} />
+      <div className="date">{date}</div>
+      <button
+        onClick={deleteThisTweet}
+        title="delete tweet"
+        className="button-effect"
+        style={display ? { display: 'block' } : { display: 'none' }}
+      >
+        <span className="emoji">🗑</span>
+      </button>
+      <p className="tweet-text">{text}</p>
+    </div>
+  );
+};
 
-export default Tweet
+export default Tweet;

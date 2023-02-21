@@ -24,14 +24,17 @@ db.tweets.insertMany([
 		_id: 1,
 		tweets: [
 			{
+				name: 'raisyam',
 				date: '17-02-2023',
 				tweet: 'keren masbro'
 			},
 			{
+				name: 'raisyam',
 				date: '17-02-2023',
 				tweet: 'ada ada aja si masbro'
 			},
 			{
+				name: 'raisyam',
 				date: '17-02-2023',
 				tweet: 'aduh si masbro'
 			}
@@ -42,10 +45,12 @@ db.tweets.insertMany([
 		_id: 2,
 		tweets: [
 			{
+				name: 'masbro',
 				date: '17-02-2023',
 				tweet: 'Dweet RISTEK is dope 🔥!'
 			},
 			{
+				name: 'masbro',
 				date: '17-02-2023',
 				tweet: 'otw masbro'
 			}
@@ -54,6 +59,7 @@ db.tweets.insertMany([
 
 	{
 		_id: 3,
+		name: 'johncena',
 		tweets: []
 	}
 ])
