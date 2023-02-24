@@ -4,6 +4,24 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const CONFIG = require('./config.js');
 const fs = require('fs');
+const multer = require('multer');
+const bcrypt = require('bcrypt');
+
+// BCRYPT
+const saltRounds = 10;
+
+// PROFILE PICS STORAGE
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'server/public/assets');
+  },
+  filename: (req, file, cb) => {
+    cb(null, new Date().getTime().toString() + ' - ' + file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage, limits: { fileSize: 8000000 } });
+// const upload = multer({ dest: 'public/assets' });
 
 // FUNCTIONS
 const shuffleArray = (arr) => {
@@ -26,6 +44,13 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(cors());
+app.use(express.json({ extended: true, limit: '20mb' }));
+app.use(express.urlencoded({ extended: true, limit: '20mb' }));
+// for parsing multipart/form-data
+// app.use(upload.array());
+// app.use(express.static('public/assets'));
+
+// app.use(express.urlencoded({ limit: '25mb' }));
 // app.use((req, res, next) => {
 // 	res.setHeader('Access-Control-Allow-Origin', '*')
 // 	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
@@ -54,6 +79,7 @@ const userSchema = new mongoose.Schema({
   profilePhoto: String,
   name: String,
   password: String,
+  description: String,
 });
 
 const User = mongoose.model('users', userSchema);
@@ -99,18 +125,35 @@ app.get('/users/:userName/:password', (req, res) => {
 
   User.findOne({ name: userName }, (err, user) => {
     if (user != null) {
-      if (password == user.password) {
-        res.json({ message: 'Login successful!' });
-      } else {
-        res.status(400).send({
-          message: 'Wrong password!',
-        });
-      }
+      bcrypt.compare(password, user.password, (err, result) => {
+        if (result === true) {
+          res.json({ message: 'Login successful!' });
+        } else {
+          res.status(400).send({
+            message: 'Wrong password!',
+          });
+        }
+      });
     } else {
       res.status(400).send({
         message: 'Username unavailable',
       });
     }
+  });
+});
+
+app.get('/desc/:userName', (req, res) => {
+  const { userName } = req.params;
+
+  console.log(userName);
+
+  User.findOne({ name: userName }, 'description', (err, description) => {
+    // const result = description;
+
+    // console.log(result);
+    // res.json(result);
+
+    res.json(description);
   });
 });
 
@@ -129,6 +172,9 @@ app.get('/tweet', (req, res) => {
         });
       }
     });
+
+    console.log('ALL TWEETS LIST');
+    console.log(allTweetsList);
 
     while (allTweetsList.length > 20) {
       allTweetsList.pop();
@@ -159,20 +205,25 @@ app.get('/tweet/:userName', (req, res) => {
 });
 
 app.get('/photo/:userName', (req, res) => {
-  const { userName } = req.params;
-  const path = __dirname + `/public/assets/${userName}.jpg`;
-  const alternative = __dirname + '/public/assets/--default.jpg';
+  const userName = req.params.userName;
+  console.log('NAMA', userName);
 
-  // console.log(path);
-  // console.log(`PHOTO EXIST? ${fs.existsSync(path)}`);
-  // res.send(fs.existsSync(path));
+  User.findOne({ name: userName }, 'profilePhoto', (err, user) => {
+    console.log('USER', user);
+    const path = __dirname + `/public/assets/${user.profilePhoto}`;
+    const alternative = __dirname + '/public/assets/--default.jpg';
 
-  if (fs.existsSync(path)) {
-    // res.send('EXIST');
-    res.sendFile(path);
-  } else {
-    res.sendFile(alternative);
-  }
+    // console.log(path);
+    // console.log(`PHOTO EXIST? ${fs.existsSync(path)}`);
+    // res.send(fs.existsSync(path));
+
+    if (fs.existsSync(path)) {
+      // res.send('EXIST');
+      res.sendFile(path);
+    } else {
+      res.sendFile(alternative);
+    }
+  });
 });
 
 // POST
@@ -181,23 +232,39 @@ app.post('/register', (req, res) => {
   User.findOne({ name: req.body.name }, (err, data) => {
     if (data != undefined && 'name' in data) {
       if (data.name == req.body.name) {
-        res.status(400).send({
+        res.status(400).json({
           message: 'This username is already picked!',
+          status: 400,
         });
       }
     } else {
       // if the name hasn't been picked up, create the user collections and tweets collections
-      const newAccount = new User(req.body);
+      bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
+        const newAccount = new User({
+          profilePhoto: req.body.profilePhoto || '--default.jpg',
+          name: req.body.name,
+          password: hash,
+          description:
+            req.description || `Hi! I am ${req.body.name}! I am using Dweet!`,
+        });
 
-      newAccount.save().then(() => {
-        User.findOne({ name: req.body.name }, '_id', (err, data) => {
-          const newUserTweet = new Tweet({
-            _id: data._id,
-            tweets: [],
-          });
+        newAccount.save().then(() => {
+          User.findOne({ name: req.body.name }, '_id', (err, data) => {
+            const newUserTweet = new Tweet({
+              _id: data._id,
+              tweets: [],
+            });
 
-          newUserTweet.save().then(() => {
-            res.json({ result: 'OK' });
+            newUserTweet.save().then(() => {
+              res.json({ message: 'OK', status: 200 });
+              console.log(req.body.profilePhoto || '--default.jpg');
+              console.log(req.body.name);
+              console.log(hash);
+              console.log(
+                req.description ||
+                  `Hi! I am ${req.body.name}! I am using Dweet!`
+              );
+            });
           });
         });
       });
@@ -243,6 +310,41 @@ app.post('/tweet/:userName', (req, res) => {
   // kalau ada, posting
 });
 
+app.post(
+  '/upload',
+  upload.single('profilepic'),
+  async (req, res) => {
+    console.log('FILE UPLOADED!');
+    console.log(req.body);
+    console.log();
+    // res.json(req.file);
+    // res.sendFile(req.file);
+    User.findOne({ name: req.body.name }, (err, user) => {
+      console.log(user.profilePhoto);
+      const prevProfilePhotoPath = `${__dirname}/public/assets/${user.profilePhoto}`;
+
+      if (fs.existsSync(prevProfilePhotoPath)) {
+        fs.unlinkSync(prevProfilePhotoPath);
+      }
+
+      User.updateOne(
+        { name: req.body.name },
+        { profilePhoto: req.file.filename },
+        (err, docs) => {
+          if (err) {
+            res.json({ message: 'Uploading file error' });
+          } else {
+            res.json({ message: 'File uploaded!' });
+          }
+        }
+      );
+    });
+  },
+  (error, req, res, next) => {
+    res.status(400).json({ message: error.message });
+  }
+);
+
 // DELETE
 app.delete('/tweet/:userName', (req, res) => {
   const { userName } = req.params;
@@ -272,11 +374,84 @@ app.delete('/tweet/:userName', (req, res) => {
 
       Tweet.updateOne({ _id: id }, { tweets: newTweets }, (err, docs) => {
         if (err) {
-          console.log('delete tweet error');
+          res.json({ message: 'delete tweet error' });
         } else {
-          console.log('successfully delete tweet');
+          res.json({ message: 'successfully delete tweet' });
         }
       });
     });
   });
+});
+
+// PUT
+app.put('/desc/:userName', (req, res) => {
+  const newDescObj = req.body;
+  const { userName } = req.params;
+
+  console.log(newDescObj);
+
+  User.updateOne({ name: userName }, newDescObj, (err, docs) => {
+    if (err) {
+      res.json({ message: 'update description error' });
+    } else {
+      console.log('success update desc');
+      res.json({ message: 'successfully update description' });
+    }
+  });
+});
+
+app.put('/tweet/:userName', (req, res) => {
+  const { userName } = req.params;
+  // const tweetId = req.query.id;
+  const editedTweet = req.body;
+
+  console.log(userName);
+  // console.log(tweetId);
+  console.log(editedTweet);
+
+  User.findOne({ name: editedTweet.name }, '_id', (err, id) => {
+    console.log(id);
+
+    Tweet.findOne({ _id: id }, 'tweets', (err, tweets) => {
+      console.log('TWEETS ---------');
+      console.log(tweets.tweets);
+
+      console.log('FOR LOOP');
+
+      // for (const tweet of tweets.tweets) {
+      //   console.log(`${editedTweet._id} == ${tweet._id.toString()}`);
+      //   console.log(editedTweet._id == tweet._id.toString());
+      //   // console.log(typeof editedTweet._id);
+      //   // console.log(typeof tweet._id.toString());
+
+      //   if (tweet._id.toString() == editedTweet._id) {
+      //     console.log(tweet);
+      //     break;
+      //   }
+      // }
+
+      const newTweets = tweets.tweets.map((tweetObject) => {
+        if (editedTweet._id == tweetObject._id.toString()) {
+          tweetObject.tweet = editedTweet.tweet;
+          return tweetObject;
+        }
+
+        return tweetObject;
+      });
+
+      // const newTweets = tweets.tweets.filter((tweet) => {
+      //   editedTweet._id == tweet._id.toString();
+      // });
+
+      Tweet.updateOne({ _id: id }, { tweets: newTweets }, (err, docs) => {
+        if (err) {
+          res.json({ message: 'delete tweet error' });
+        } else {
+          res.json({ message: 'successfully delete tweet' });
+        }
+      });
+    });
+  });
+
+  // res.send('OK');
 });

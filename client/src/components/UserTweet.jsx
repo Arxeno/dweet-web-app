@@ -3,7 +3,7 @@ import CONFIG from '../config';
 import GlobalStateContext from '../context/GlobalStateContext';
 import { Link } from 'react-router-dom';
 
-const UserTweet = ({ id, updateTweets }) => {
+const UserTweet = ({ id, updateTweetsArray, setErrorMessage }) => {
   const { userNameLogin } = useContext(GlobalStateContext);
   const [userLoginTweet, setUserLoginTweet] = useState('');
 
@@ -13,6 +13,8 @@ const UserTweet = ({ id, updateTweets }) => {
 
   const postTweet = () => {
     if (userLoginTweet != '') {
+      setErrorMessage('');
+
       const today = new Date();
       let dd = today.getDate();
       let mm = today.getMonth() + 1;
@@ -67,11 +69,11 @@ const UserTweet = ({ id, updateTweets }) => {
           console.error("ERROR! Can't posting tweet");
         });
 
-      updateTweets(body);
+      updateTweetsArray(body);
 
       setUserLoginTweet('');
     } else {
-      alert('Tweet must not be empty!');
+      setErrorMessage('Tweet must not be empty!');
     }
   };
 
@@ -79,18 +81,20 @@ const UserTweet = ({ id, updateTweets }) => {
     <div id={id}>
       <h1 id="welcome-back">
         Welcome back,
+        <br />
         <Link to={`/${userNameLogin.state}`}>{userNameLogin.state}</Link>!
         <span className="emoji">✨</span>
       </h1>
       <textarea
         id="tweet-textarea"
+        className="tweet-textarea"
         placeholder="What's happening?"
         onChange={handleChangeTextArea}
         value={userLoginTweet}
       ></textarea>
       <div id="user-tweet-buttons">
         <button className="button-effect button-yellow">
-          Edit Close Friends
+          Edit Close Friends <span className="emoji">😁😎</span>
         </button>
         <button className="button-effect button-yellow" onClick={postTweet}>
           Tweet <span className="emoji">✍</span>

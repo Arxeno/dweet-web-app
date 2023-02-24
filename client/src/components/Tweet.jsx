@@ -8,6 +8,7 @@ const Tweet = ({
   text,
   display,
   removeTweet,
+  editThisTweet,
 }) => {
   // const deleteThisTweet = () => {
   //   console.log('DELETE this tweet!--------------');
@@ -17,18 +18,35 @@ const Tweet = ({
   //   document.querySelector(`#tweet-${tweetId}`).remove;
   // };
 
+  // const editThisTweet = () => {
+  //   console.log('edit this tweet');
+  // };
+
   return (
     <div id={`tweet-${tweetId}`} className="tweet shadow-effect">
       <Account imagePhoto={imagePhoto} userName={userName} />
       <div className="date">{date}</div>
+
       <button
+        id="edit-tweet"
+        onClick={() => editThisTweet(text)}
+        title="Edit this tweet"
+        className="button-effect"
+        style={display ? { display: 'block' } : { display: 'none' }}
+      >
+        <span className="emoji">✍</span>
+      </button>
+
+      <button
+        id="delete-tweet"
         onClick={removeTweet}
-        title="delete tweet"
+        title="Delete this tweet"
         className="button-effect"
         style={display ? { display: 'block' } : { display: 'none' }}
       >
         <span className="emoji">🗑</span>
       </button>
+
       <p className="tweet-text">{text}</p>
     </div>
   );

@@ -1,23 +1,31 @@
 import { useState } from 'react';
 import CONFIG from '../config.js';
+import { Link } from 'react-router-dom';
 
 const SignUp = () => {
+  const [userNameState, setUserNameState] = useState('');
+  const [passwordState, setPasswordState] = useState('');
+  const [profilePic, setProfilePic] = useState(null);
+  const [isUsernameEmpty, setIsUsernameEmpty] = useState(true);
+  const [isPasswordEmpty, setIsPasswordEmpty] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
+  // const [isProfilePicEmpty, setIsProfilePicEmpty] = useState(true);
+
   const signUpClick = () => {
-    const userName = document.querySelector('#signup-username').value;
     const password = document.querySelector('#signup-password').value;
     const profilePicture =
       document.querySelector('#signup-profilepic').files[0];
 
-    console.log(userName);
-    // console.log(typeof userName)
+    console.log(userNameState);
+    // console.log(typeof userNameState)
     console.log(password);
     // console.log(typeof password)
     console.log(profilePicture);
     // console.log(typeof profilePicture)
 
     const body = {
-      profilePhoto: `${userName}.jpg`,
-      name: userName,
+      profilePhoto: `${userNameState}.jpg`,
+      name: userNameState,
       password: password,
     };
 
@@ -30,15 +38,42 @@ const SignUp = () => {
     };
 
     fetch(`${CONFIG.BACKEND_URL}/register`, options)
-      .then((res) => {
-        // res.json()
-        console.log(res.status);
+      .then((response) => {
+        return response.json();
+        // console.log('response');
+        // console.log(response);
 
-        if (res.status == 400) {
-          alert('ERROR: This username is already picked!');
+        // if (response.status == 400) {
+        //   setErrorMessage('This username is already picked!');
+        // } else {
+        //   setErrorMessage('');
+        // alert('Sign Up Success')
+        //   window.location.href = `/login`;
+        // }
+      })
+      .then(async (responseJson) => {
+        if (responseJson.status == 400) {
+          setErrorMessage(responseJson.message);
         } else {
-          // alert('Sign Up Success')
-          window.location.href = `/login`;
+          setErrorMessage('');
+          if (profilePic) {
+            const data = new FormData();
+            data.append('profilepic', profilePic);
+            data.append('name', userNameState);
+
+            const options = {
+              method: 'POST',
+              body: data,
+            };
+
+            const response = await fetch(
+              `${CONFIG.BACKEND_URL}/upload`,
+              options
+            );
+            const responseJson = await response.json();
+            console.log(responseJson);
+            window.location.href = '/login';
+          }
         }
       })
       .catch((err) => {
@@ -52,19 +87,31 @@ const SignUp = () => {
     // 	.catch(err => console.error(err))
   };
 
-  const [isUsernameEmpty, setIsUsernameEmpty] = useState(true);
-  const [isPasswordEmpty, setIsPasswordEmpty] = useState(true);
-  // const [isProfilePicEmpty, setIsProfilePicEmpty] = useState(true);
+  const usernameChange = (event) => {
+    setErrorMessage('');
+    const inputUserName = event.target.value || '';
+    // console.log('event target value', event.target.value);
+    // console.log('inputUserName', inputUserName);
 
-  const usernameChange = () => {
-    if (document.querySelector('#signup-username').value) {
+    // limit username length to 30 characters
+    if (inputUserName.length > 30) {
+      inputUserName = inputUserName.slice(0, 21);
+    }
+
+    setUserNameState(inputUserName.toLowerCase());
+
+    if (userNameState) {
       setIsUsernameEmpty(false);
     } else {
       setIsUsernameEmpty(true);
     }
   };
 
-  const passwordChange = () => {
+  const passwordChange = (event) => {
+    setErrorMessage('');
+
+    setPasswordState(event.target.value);
+
     if (document.querySelector('#signup-password').value) {
       setIsPasswordEmpty(false);
     } else {
@@ -89,7 +136,12 @@ const SignUp = () => {
 
         <div>
           <h4>Username</h4>
-          <input id="signup-username" onChange={usernameChange} required />
+          <input
+            id="signup-username"
+            value={userNameState}
+            onChange={usernameChange}
+            required
+          />
         </div>
 
         <div>
@@ -97,6 +149,7 @@ const SignUp = () => {
           <input
             id="signup-password"
             type="password"
+            value={passwordState}
             onChange={passwordChange}
             required
           />
@@ -104,7 +157,13 @@ const SignUp = () => {
 
         <div>
           <h4>Profile Picture</h4>
-          <input id="signup-profilepic" type="file" accept="image/jpeg" />
+          <input
+            name="profilepic"
+            id="signup-profilepic"
+            type="file"
+            accept=".png, .jpg, .jpeg"
+            onChange={(event) => setProfilePic(event.target.files[0])}
+          />
         </div>
 
         <button className="button-effect button-yellow" onClick={signUpClick}>
@@ -114,14 +173,15 @@ const SignUp = () => {
         <hr />
 
         <p>
-          Already a user? <a href="/login">Log In</a>
+          Already a user? <Link to="/login">Log In</Link>
         </p>
       </div>
 
-      {isUsernameEmpty || isPasswordEmpty ? (
+      {isUsernameEmpty || isPasswordEmpty || errorMessage ? (
         <div id="warning-signup" className="shadow-effect">
           {isUsernameEmpty ? <p>Username is empty.</p> : null}
           {isPasswordEmpty ? <p>Password is empty.</p> : null}
+          {errorMessage ? <p>{errorMessage}</p> : null}
         </div>
       ) : null}
     </div>

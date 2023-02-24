@@ -5,11 +5,18 @@ import GlobalStateContext from '../context/GlobalStateContext';
 import Navbar from '../components/Navbar';
 import CONFIG from '../config';
 import Tweets from '../components/Tweets';
+import Backdrop from '../components/Backdrop';
+import EditTweet from '../components/EditTweet';
 
 const Home = () => {
   const [tweets, setTweets] = useState([]);
+  const [showEditTweetComponent, setShowEditTweetComponent] = useState(false);
+  const [editTweetText, setEditTweetText] = useState('');
+  const [editTweetIndex, setEditTweetIndex] = useState(-1);
+  const [errorMessage, setErrorMessage] = useState('');
+
   const { isLogin, userNameLogin } = useContext(GlobalStateContext);
-  console.log(`IS LOGIN -> ${isLogin.state}`);
+  // console.log(`IS LOGIN -> ${isLogin.state}`);
 
   const getRandomTweetData = async () => {
     fetch(`${CONFIG.BACKEND_URL}/tweet`, { method: 'GET' })
@@ -18,7 +25,7 @@ const Home = () => {
       .catch((error) => console.error(error));
   };
 
-  const updateTweets = (newTweet) => {
+  const updateTweetsArray = (newTweet) => {
     // const newTweets = tweets.unshift(newTweet); // add new tweet at first index
     // console.log('NEW TWEET');
     // console.log(tweets);
@@ -35,10 +42,10 @@ const Home = () => {
   };
 
   const fetchDeleteTweet = async (tweetDeleted) => {
-    console.log('FETCH DELETE TWEET');
-    console.log(
-      `${CONFIG.BACKEND_URL}/tweet/${tweetDeleted.name}?id=${tweetDeleted._id}`
-    );
+    // console.log('FETCH DELETE TWEET');
+    // console.log(
+    //   `${CONFIG.BACKEND_URL}/tweet/${tweetDeleted.name}?id=${tweetDeleted._id}`
+    // );
 
     const options = { method: 'DELETE' };
 
@@ -49,8 +56,8 @@ const Home = () => {
   };
 
   const removeTweetFromHome = async (indexDeleted) => {
-    console.log('----------------');
-    console.log('tweet deleted from home');
+    // console.log('----------------');
+    // console.log('tweet deleted from home');
     // console.log(`TWEET ID: ${tweetId}`);
     // console.log('----------------');
 
@@ -71,6 +78,45 @@ const Home = () => {
     // console.log(tweetDeleted);
   };
 
+  const fetchEditTweet = (editedTweet) => {
+    const options = {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(editedTweet),
+    };
+
+    fetch(`${CONFIG.BACKEND_URL}/tweet/${editedTweet.name}`, options);
+  };
+
+  const editThisTweet = (tweetText, index) => {
+    console.log('edit this tweet');
+    console.log(`TWEET TEXT ${tweetText}`);
+    setEditTweetText(tweetText);
+    // document.querySelector('body').classList.add('no-scroll');
+    setShowEditTweetComponent(true);
+    setEditTweetIndex(index);
+  };
+
+  const removeEditTweet = () => {
+    console.log('Backdrop clicked!');
+    // document.querySelector('body').classList.remove('no-scroll');
+    setShowEditTweetComponent(false);
+  };
+
+  const confirmEdit = async (newTweet) => {
+    removeEditTweet();
+
+    const editedTweet = tweets[editTweetIndex];
+    // console.log('EDITED TWEETS');
+    // console.log(editedTweet);
+    // console.log(newTweet);
+
+    editedTweet.tweet = newTweet;
+    // console.log(editedTweet);
+
+    await fetchEditTweet(editedTweet);
+  };
+
   useEffect(() => {
     getRandomTweetData();
   }, []);
@@ -81,12 +127,29 @@ const Home = () => {
       <div id="home-page">
         <UserTweet
           id="user-tweet"
-          updateTweets={(element) => updateTweets(element)}
+          updateTweetsArray={(element) => updateTweetsArray(element)}
+          setErrorMessage={setErrorMessage}
         />
+
+        {errorMessage ? (
+          <div id="warning-home" className="shadow-effect">
+            {errorMessage ? <p>{errorMessage}</p> : null}
+          </div>
+        ) : null}
+
         <Tweets
           tweets={tweets}
           removeTweet={(index) => removeTweetFromHome(index)}
+          editTweet={(tweetText, index) => editThisTweet(tweetText, index)}
         />
+        {showEditTweetComponent ? (
+          <EditTweet
+            removeThisComponent={removeEditTweet}
+            tweetText={editTweetText}
+            confirmEdit={confirmEdit}
+          />
+        ) : null}
+
         {/* <div id="tweets-container">
           {tweets.map((data) => {
             return (

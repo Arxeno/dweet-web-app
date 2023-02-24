@@ -2,6 +2,7 @@ import { useContext, useState } from 'react';
 import CONFIG from '../config';
 import GlobalStateContext from '../context/GlobalStateContext';
 import { Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const LogIn = () => {
   // { setIsLogIn, setUserNameState }
@@ -9,7 +10,8 @@ const LogIn = () => {
   const [loginError, setLoginError] = useState('');
   const [isUsernameEmpty, setIsUsernameEmpty] = useState(true);
   const [isPasswordEmpty, setIsPasswordEmpty] = useState(true);
-  const { isLogin, userNameLogin } = useContext(GlobalStateContext);
+  const { isLogin, userNameLogin, userNameLoginPhoto } =
+    useContext(GlobalStateContext);
 
   // console.log(`IS LOGIN -> ${isLogin.state}`);
 
@@ -41,6 +43,9 @@ const LogIn = () => {
           // setUserNameState(`@${userName}`)
           // setIsLogIn(true)
           userNameLogin.setState(`@${userName}`);
+          userNameLoginPhoto.setState(
+            `${CONFIG.BACKEND_URL}/photo/${userName}`
+          );
           isLogin.setState(true);
         }
       })
@@ -92,7 +97,7 @@ const LogIn = () => {
         <hr />
 
         <p>
-          Need an account? <a href="/signup">Sign Up</a>
+          Need an account? <Link to="/signup">Sign Up</Link>
         </p>
       </div>
 

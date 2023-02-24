@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import Tweet from './Tweet';
 import GlobalStateContext from '../context/GlobalStateContext';
 
-const Tweets = ({ tweets, removeTweet }) => {
+const Tweets = ({ tweets, removeTweet, editTweet }) => {
   const { userNameLogin } = useContext(GlobalStateContext);
 
   return (
@@ -11,8 +11,8 @@ const Tweets = ({ tweets, removeTweet }) => {
         // console.log(`USERNAME LOGIN ${userNameLogin.state.slice(1)}`);
         // console.log(`DATA.NAME ${data.name}`);
         // console.log(`CONDITION ${data.name == userNameLogin.state.slice(1)}`);
-        console.log(`OBJECT ID ${data._id}`);
-        console.log(typeof data._id);
+        // console.log(`OBJECT ID ${data._id}`);
+        // console.log(typeof data._id);
         // console.log('---------------------');
 
         return (
@@ -25,6 +25,7 @@ const Tweets = ({ tweets, removeTweet }) => {
             text={data.tweet}
             display={data.name == userNameLogin.state.slice(1)}
             removeTweet={() => removeTweet(index)}
+            editThisTweet={(tweetText) => editTweet(tweetText, index)}
           />
         );
       })}

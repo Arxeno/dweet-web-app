@@ -5,7 +5,7 @@ const GlobalStateContext = createContext();
 const GlobalStateProvider = ({ children }) => {
   const [isLogin, setIsLogin] = useState(false);
   const [userNameLogin, setUserNameLogin] = useState(null);
-  const [goHome, setGoHome] = useState(false);
+  const [userNameLoginPhoto, setUserNameLoginPhoto] = useState(null);
 
   const valueToShare = {
     isLogin: {
@@ -18,6 +18,12 @@ const GlobalStateProvider = ({ children }) => {
       state: userNameLogin,
       setState: (name) => {
         setUserNameLogin(name);
+      },
+    },
+    userNameLoginPhoto: {
+      state: userNameLoginPhoto,
+      setState: (photo) => {
+        setUserNameLoginPhoto(photo);
       },
     },
   };

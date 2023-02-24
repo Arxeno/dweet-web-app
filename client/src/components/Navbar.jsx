@@ -3,17 +3,25 @@ import UserNameContext from '../context/UserNameContext';
 import Account from './Account';
 import GlobalStateContext from '../context/GlobalStateContext';
 import { Navigate } from 'react-router-dom';
+import CONFIG from '../config';
 
 const Navbar = () => {
   // const {userName, setUserName} = useContext(UserNameContext)\
-  const { userNameLogin } = useContext(GlobalStateContext);
-  console.log(`NAMA ${userNameLogin.state}`);
+  const { userNameLogin, userNameLoginPhoto } = useContext(GlobalStateContext);
+  // console.log(`NAMA ${userNameLogin.state}`);
 
   const [goHome, setGoHome] = useState(false);
-  console.log(`gohome -> ${goHome}`);
+  // console.log(`gohome -> ${goHome}`);
   const clickHandlerGoHome = () => {
     setGoHome(true);
   };
+
+  // useEffect(() => {
+  //   userNameLoginPhoto.setState(
+  //     `${CONFIG.BACKEND_URL}/photo/${userNameLogin.state.slice(1)}`
+  //   );
+  //   console.log(userNameLoginPhoto.state);
+  // }, []);
 
   return (
     <nav id="header-nav">
@@ -27,7 +35,7 @@ const Navbar = () => {
         <img src="images/hamburger-menu.svg" alt="Hamburger menu" />
       </button>
       <Account
-        imagePhoto="https://www.rainforest-alliance.org/wp-content/uploads/2021/06/capybara-square-1.jpg.optimal.jpg"
+        imagePhoto={userNameLoginPhoto.state}
         userName={userNameLogin.state || 'Log In'}
       />
       {goHome ? <Navigate to="/home" /> : null}

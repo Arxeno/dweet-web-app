@@ -90,6 +90,8 @@ nav#header-nav {
 
   img {
     height: 58px;
+    width: 58px;
+    object-fit: cover;
     border-radius: 100%;
     border: $black-border;
   }
@@ -99,6 +101,31 @@ nav#header-nav {
     margin-left: 7px;
     color: black;
   }
+}
+
+/*
+  TEXTAREA
+*/
+
+.tweet-textarea {
+  grid-area: text-area;
+  border-radius: 10px;
+  border: $black-border;
+  resize: none;
+  padding: 10px;
+  font-family: 'Prompt', cursive;
+  font-size: 1rem;
+  position: relative;
+  bottom: 0;
+  right: 0;
+  transition: 0.25s ease-out;
+}
+
+.tweet-textarea:focus {
+  outline: none;
+  box-shadow: 3px 3px black;
+  bottom: 3px;
+  right: 3px;
 }
 
 /*
@@ -128,17 +155,38 @@ nav#header-nav {
   box-shadow: 0 0;
 }
 
+/*
+  WARNING DIV
+*/
+
+#warning-signup,
+#warning-home,
+#warning-edit-profilepic {
+  background: $red;
+  margin-top: 30px;
+  width: 80%;
+  max-width: 400px;
+  padding: 10px;
+}
+
+// #warning-edit-profilepic {
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+// }
+
 #home-page {
   width: 600px;
   margin: auto;
   display: grid;
   grid-template-columns: 1fr;
+  row-gap: 10px;
   justify-content: center;
 
   #user-tweet {
     width: 100%;
     display: grid;
-    grid-template-areas: 'welcome buttons' 'text-area buttons';
+    grid-template-areas: 'welcome welcome' 'text-area buttons';
     grid-template-columns: 1.5fr 1fr;
     grid-auto-rows: 1fr 1.5fr;
     column-gap: 7px;
@@ -178,27 +226,6 @@ nav#header-nav {
       }
     }
 
-    #tweet-textarea {
-      grid-area: text-area;
-      border-radius: 10px;
-      border: $black-border;
-      resize: none;
-      padding: 10px;
-      font-family: 'Prompt', cursive;
-      font-size: 1rem;
-      position: relative;
-      bottom: 0;
-      right: 0;
-      transition: 0.25s ease-out;
-    }
-
-    #tweet-textarea:focus {
-      outline: none;
-      box-shadow: 3px 3px black;
-      bottom: 3px;
-      right: 3px;
-    }
-
     #user-tweet-buttons {
       grid-area: buttons;
       display: flex;
@@ -212,6 +239,12 @@ nav#header-nav {
       }
     }
   }
+
+  #warning-home {
+    margin: 0 auto;
+    width: 100%;
+    max-width: none;
+  }
 }
 
 .tweet {
@@ -219,7 +252,7 @@ nav#header-nav {
   margin: 20px auto;
   padding: 10px;
   display: grid;
-  grid-template-areas: 'account date delete' 'tweet-text tweet-text tweet-text';
+  grid-template-areas: 'account date edit delete' 'tweet-text tweet-text tweet-text tweet-text';
   grid-template-columns: auto 1fr auto;
   column-gap: 7px;
   row-gap: 7px;
@@ -234,7 +267,16 @@ nav#header-nav {
     line-height: 58px;
   }
 
-  button {
+  button#edit-tweet {
+    grid-area: edit;
+    background: $yellow;
+
+    .emoji {
+      font-size: 1.5rem;
+    }
+  }
+
+  button#delete-tweet {
     grid-area: delete;
     background: $red;
     // display: none;
@@ -271,6 +313,7 @@ nav#header-nav {
     img {
       height: 80px;
       width: 80px;
+      object-fit: cover;
       border-radius: 100%;
       border: $black-border;
     }
@@ -283,9 +326,29 @@ nav#header-nav {
     }
   }
 
-  button#log-out {
-    width: 100%;
-    background: $red;
+  #profile-buttons-div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas: 'profile-picture change-description' 'log-out log-out';
+    column-gap: 10px;
+    row-gap: 10px;
+
+    button#change-profile-picture {
+      grid-area: profile-picture;
+      width: 100%;
+    }
+
+    button#change-description {
+      grid-area: change-description;
+      width: 100%;
+    }
+
+    button#log-out {
+      grid-area: log-out;
+      width: 100%;
+      background: $red;
+    }
   }
 }
 
@@ -357,12 +420,189 @@ nav#header-nav {
       margin-top: 10px;
     }
   }
+}
 
-  #warning-signup {
-    background: $red;
-    margin-top: 30px;
-    width: 80%;
-    max-width: 400px;
+#backdrop {
+  width: 100%;
+  height: 100%;
+  background: black;
+  opacity: 0.5;
+}
+
+// .no-scroll {
+//   overflow-y: hidden;
+// }
+
+#edit-tweet-component {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  #edit-tweet-box {
+    display: grid;
+    background: white;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    grid-template-areas: 'header header' 'textarea textarea' 'cancel confirm';
+    column-gap: 10px;
+    row-gap: 10px;
     padding: 10px;
+
+    h2 {
+      grid-area: header;
+      text-align: center;
+    }
+
+    textarea {
+      grid-area: textarea;
+    }
+
+    button {
+      width: 100%;
+    }
+
+    button#cancel-edit {
+      grid-area: cancel;
+      background: $red;
+    }
+
+    button#confirm-edit {
+      grid-area: confirm;
+    }
+  }
+}
+
+#edit-desc-component {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  #edit-desc-box {
+    display: grid;
+    background: white;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    grid-template-areas: 'header header' 'textarea textarea' 'cancel confirm';
+    column-gap: 10px;
+    row-gap: 10px;
+    padding: 10px;
+
+    h2 {
+      grid-area: header;
+      text-align: center;
+    }
+
+    textarea {
+      grid-area: textarea;
+    }
+
+    button {
+      width: 100%;
+    }
+
+    button#cancel-edit {
+      grid-area: cancel;
+      background: $red;
+    }
+
+    button#confirm-edit {
+      grid-area: confirm;
+    }
+  }
+}
+
+#edit-profpic-component {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  #edit-profpic-box {
+    display: grid;
+    background: white;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    grid-template-areas: 'header header' 'image image' 'upload upload' 'cancel confirm' 'warning warning';
+    column-gap: 10px;
+    row-gap: 10px;
+    padding: 10px;
+    padding-bottom: 20px;
+
+    h2 {
+      grid-area: header;
+      text-align: center;
+    }
+
+    img#image-preview {
+      grid-area: image;
+      margin: auto;
+      border-radius: 100%;
+      border: $black-border;
+      width: 220px;
+      height: 220px;
+      object-fit: cover;
+    }
+
+    input {
+      grid-area: upload;
+      width: 100%;
+      border: $black-border;
+      border-radius: 15px;
+      font-size: 1.3rem;
+      padding: 10px;
+      transition: 0.25s ease-out;
+      position: relative;
+      bottom: 0;
+      right: 0;
+      margin: auto;
+    }
+
+    input[type='file']:hover {
+      outline: none;
+      box-shadow: 3px 3px black;
+      bottom: 3px;
+      right: 3px;
+    }
+
+    input::-webkit-file-upload-button {
+      background: $yellow;
+      border: $black-border;
+      border-radius: 10px;
+    }
+
+    input::file-selector-button {
+      background: $yellow;
+      border: $black-border;
+      border-radius: 10px;
+    }
+
+    button {
+      width: 100%;
+    }
+
+    button#cancel-edit {
+      grid-area: cancel;
+      background: $red;
+    }
+
+    button#confirm-edit {
+      grid-area: confirm;
+    }
+
+    #warning-edit-profilepic {
+      grid-area: warning;
+      margin: auto;
+    }
   }
 }

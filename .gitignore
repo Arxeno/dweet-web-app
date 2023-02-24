@@ -1,2 +1,10 @@
 node_modules/
 dist/
+
+server/public/assets
+
+*.dia
+*.dia~
+
+database-structure.txt
+dummy-account.txt
