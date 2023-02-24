@@ -21,7 +21,6 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage, limits: { fileSize: 8000000 } });
-// const upload = multer({ dest: 'public/assets' });
 
 // FUNCTIONS
 const shuffleArray = (arr) => {
@@ -46,17 +45,6 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(express.json({ extended: true, limit: '20mb' }));
 app.use(express.urlencoded({ extended: true, limit: '20mb' }));
-// for parsing multipart/form-data
-// app.use(upload.array());
-// app.use(express.static('public/assets'));
-
-// app.use(express.urlencoded({ limit: '25mb' }));
-// app.use((req, res, next) => {
-// 	res.setHeader('Access-Control-Allow-Origin', '*')
-// 	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
-// 	res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-// 	next()
-// })
 
 // MONGODB
 // STARTING MONGODB
@@ -98,26 +86,6 @@ const tweetsSchema = new mongoose.Schema({
 
 const Tweet = mongoose.model('tweets', tweetsSchema);
 
-// Users.collection.insertOne({
-// 	name: 'Raisyam',
-// 	password: 'halo123'
-// })
-
-// User.create({
-// 	_id: 4,
-// 	name: 'Raisyam',
-// 	password: 'halo123'
-// })
-
-// const user = new Users({
-// 	name: 'Raisyam',
-// 	password: 'halo123'
-// })
-
-// user.save()
-
-// console.log('Successfully add data.')
-
 // EXPRESS API ROUTES
 // GET
 app.get('/users/:userName/:password', (req, res) => {
@@ -145,14 +113,7 @@ app.get('/users/:userName/:password', (req, res) => {
 app.get('/desc/:userName', (req, res) => {
   const { userName } = req.params;
 
-  console.log(userName);
-
   User.findOne({ name: userName }, 'description', (err, description) => {
-    // const result = description;
-
-    // console.log(result);
-    // res.json(result);
-
     res.json(description);
   });
 });
@@ -162,42 +123,25 @@ app.get('/tweet', (req, res) => {
 
   Tweet.find({}, (err, tweetsOfPeople) => {
     tweetsOfPeople.forEach((tweets) => {
-      // console.log(tweets.tweets.length);
-      // console.log('------');
       if (tweets.tweets.length > 0) {
-        // console.log(tweets.tweets.length);
-        // console.log();
         tweets.tweets.forEach((tweet) => {
           allTweetsList.push(tweet);
         });
       }
     });
 
-    console.log('ALL TWEETS LIST');
-    console.log(allTweetsList);
-
     while (allTweetsList.length > 20) {
       allTweetsList.pop();
     }
 
-    // console.log();
-    // console.log('TES');
-    // console.log(allTweetsList);
-    // console.log('SHUFFLE--------------');
-    // console.log(shuffleArray(allTweetsList));
     res.json(shuffleArray(allTweetsList));
   });
 });
 
 app.get('/tweet/:userName', (req, res) => {
-  // res.send(req.params.userName)
   const { userName } = req.params;
-  // res.send('hello');
 
   User.findOne({ name: userName }, '_id', (err, id) => {
-    console.log('TWEET ID');
-    console.log(id);
-
     Tweet.findOne({ _id: id }, (err, tweets) => {
       res.json(tweets);
     });
@@ -206,19 +150,12 @@ app.get('/tweet/:userName', (req, res) => {
 
 app.get('/photo/:userName', (req, res) => {
   const userName = req.params.userName;
-  console.log('NAMA', userName);
 
   User.findOne({ name: userName }, 'profilePhoto', (err, user) => {
-    console.log('USER', user);
     const path = __dirname + `/public/assets/${user.profilePhoto}`;
     const alternative = __dirname + '/public/assets/--default.jpg';
 
-    // console.log(path);
-    // console.log(`PHOTO EXIST? ${fs.existsSync(path)}`);
-    // res.send(fs.existsSync(path));
-
     if (fs.existsSync(path)) {
-      // res.send('EXIST');
       res.sendFile(path);
     } else {
       res.sendFile(alternative);
@@ -257,13 +194,6 @@ app.post('/register', (req, res) => {
 
             newUserTweet.save().then(() => {
               res.json({ message: 'OK', status: 200 });
-              console.log(req.body.profilePhoto || '--default.jpg');
-              console.log(req.body.name);
-              console.log(hash);
-              console.log(
-                req.description ||
-                  `Hi! I am ${req.body.name}! I am using Dweet!`
-              );
             });
           });
         });
@@ -277,14 +207,9 @@ app.post('/tweet/:userName', (req, res) => {
 
   // kalau nama user tidak tersedia di database, send error message
   User.findOne({ name: userName }, '_id', (err, id) => {
-    // console.log(id);
-
     // get user's tweets data
     Tweet.findOne({ _id: id }, 'tweets', (err, tweets) => {
       const { name, date, tweet } = req.body;
-
-      console.log(req.body);
-      console.log(tweets);
 
       // add new tweet
       tweets.tweets.push({
@@ -293,15 +218,12 @@ app.post('/tweet/:userName', (req, res) => {
         tweet: tweet,
       });
 
-      console.log('after push');
-      console.log(tweets);
-
       // update user's tweet data
       Tweet.updateOne({ _id: id }, { tweets: tweets.tweets }, (err, docs) => {
         if (err) {
-          console.log('add tweet error');
+          res.json({ message: 'add tweet error' });
         } else {
-          console.log('successfully add tweet');
+          res.json({ message: 'successfully add tweet' });
         }
       });
     });
@@ -314,13 +236,7 @@ app.post(
   '/upload',
   upload.single('profilepic'),
   async (req, res) => {
-    console.log('FILE UPLOADED!');
-    console.log(req.body);
-    console.log();
-    // res.json(req.file);
-    // res.sendFile(req.file);
     User.findOne({ name: req.body.name }, (err, user) => {
-      console.log(user.profilePhoto);
       const prevProfilePhotoPath = `${__dirname}/public/assets/${user.profilePhoto}`;
 
       if (fs.existsSync(prevProfilePhotoPath)) {
@@ -350,27 +266,13 @@ app.delete('/tweet/:userName', (req, res) => {
   const { userName } = req.params;
   const tweetId = req.query.id;
 
-  console.log(`id query ${tweetId}`);
-  console.log(`username ${userName}`);
-
   // search user by name to get the id
   User.findOne({ name: userName }, '_id', (err, id) => {
-    console.log('user find one');
-    console.log(id);
-
     // use the user id to get the id of tweets
     Tweet.findOne({ _id: id }, (err, tweets) => {
-      console.log('tweet find one');
-      console.log(tweets.tweets);
-      // console.log(tweetId);
-      console.log('filter-------');
-      // console.log(tweet._id.toString());
-
       const newTweets = tweets.tweets.filter(
         (tweet) => tweetId != tweet._id.toString()
       );
-
-      console.log(newTweets);
 
       Tweet.updateOne({ _id: id }, { tweets: newTweets }, (err, docs) => {
         if (err) {
@@ -388,13 +290,10 @@ app.put('/desc/:userName', (req, res) => {
   const newDescObj = req.body;
   const { userName } = req.params;
 
-  console.log(newDescObj);
-
   User.updateOne({ name: userName }, newDescObj, (err, docs) => {
     if (err) {
       res.json({ message: 'update description error' });
     } else {
-      console.log('success update desc');
       res.json({ message: 'successfully update description' });
     }
   });
@@ -402,34 +301,10 @@ app.put('/desc/:userName', (req, res) => {
 
 app.put('/tweet/:userName', (req, res) => {
   const { userName } = req.params;
-  // const tweetId = req.query.id;
   const editedTweet = req.body;
 
-  console.log(userName);
-  // console.log(tweetId);
-  console.log(editedTweet);
-
   User.findOne({ name: editedTweet.name }, '_id', (err, id) => {
-    console.log(id);
-
     Tweet.findOne({ _id: id }, 'tweets', (err, tweets) => {
-      console.log('TWEETS ---------');
-      console.log(tweets.tweets);
-
-      console.log('FOR LOOP');
-
-      // for (const tweet of tweets.tweets) {
-      //   console.log(`${editedTweet._id} == ${tweet._id.toString()}`);
-      //   console.log(editedTweet._id == tweet._id.toString());
-      //   // console.log(typeof editedTweet._id);
-      //   // console.log(typeof tweet._id.toString());
-
-      //   if (tweet._id.toString() == editedTweet._id) {
-      //     console.log(tweet);
-      //     break;
-      //   }
-      // }
-
       const newTweets = tweets.tweets.map((tweetObject) => {
         if (editedTweet._id == tweetObject._id.toString()) {
           tweetObject.tweet = editedTweet.tweet;
@@ -438,10 +313,6 @@ app.put('/tweet/:userName', (req, res) => {
 
         return tweetObject;
       });
-
-      // const newTweets = tweets.tweets.filter((tweet) => {
-      //   editedTweet._id == tweet._id.toString();
-      // });
 
       Tweet.updateOne({ _id: id }, { tweets: newTweets }, (err, docs) => {
         if (err) {
@@ -452,6 +323,4 @@ app.put('/tweet/:userName', (req, res) => {
       });
     });
   });
-
-  // res.send('OK');
 });
