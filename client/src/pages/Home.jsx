@@ -1,11 +1,8 @@
+import { useEffect, useState } from 'react';
 import UserTweet from '../components/UserTweet';
-import Tweet from '../components/Tweet';
-import { useContext, useEffect, useState } from 'react';
-import GlobalStateContext from '../context/GlobalStateContext';
 import Navbar from '../components/Navbar';
 import CONFIG from '../config';
 import Tweets from '../components/Tweets';
-import Backdrop from '../components/Backdrop';
 import EditTweet from '../components/EditTweet';
 
 const Home = () => {
@@ -15,23 +12,14 @@ const Home = () => {
   const [editTweetIndex, setEditTweetIndex] = useState(-1);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const { isLogin, userNameLogin } = useContext(GlobalStateContext);
-  // console.log(`IS LOGIN -> ${isLogin.state}`);
-
   const getRandomTweetData = async () => {
     fetch(`${CONFIG.BACKEND_URL}/tweet`, { method: 'GET' })
       .then((response) => response.json())
       .then((responseJson) => setTweets(responseJson))
-      .catch((error) => console.error(error));
+      .catch((error) => alert(error));
   };
 
   const updateTweetsArray = (newTweet) => {
-    // const newTweets = tweets.unshift(newTweet); // add new tweet at first index
-    // console.log('NEW TWEET');
-    // console.log(tweets);
-    // console.log(newTweet);
-    // console.log(tweets.unshift(newTweet))
-
     const newTweets = [newTweet].concat(tweets);
 
     while (newTweets.length > 20) {
@@ -42,11 +30,6 @@ const Home = () => {
   };
 
   const fetchDeleteTweet = async (tweetDeleted) => {
-    // console.log('FETCH DELETE TWEET');
-    // console.log(
-    //   `${CONFIG.BACKEND_URL}/tweet/${tweetDeleted.name}?id=${tweetDeleted._id}`
-    // );
-
     const options = { method: 'DELETE' };
 
     fetch(
@@ -56,11 +39,6 @@ const Home = () => {
   };
 
   const removeTweetFromHome = async (indexDeleted) => {
-    // console.log('----------------');
-    // console.log('tweet deleted from home');
-    // console.log(`TWEET ID: ${tweetId}`);
-    // console.log('----------------');
-
     const newTweets = tweets.filter(
       (currentValue, index) => index != indexDeleted
     );
@@ -73,9 +51,6 @@ const Home = () => {
     setTweets(newTweets);
 
     await fetchDeleteTweet(tweetDeleted);
-
-    // console.log(newTweets);
-    // console.log(tweetDeleted);
   };
 
   const fetchEditTweet = (editedTweet) => {
@@ -89,31 +64,20 @@ const Home = () => {
   };
 
   const editThisTweet = (tweetText, index) => {
-    console.log('edit this tweet');
-    console.log(`TWEET TEXT ${tweetText}`);
     setEditTweetText(tweetText);
-    // document.querySelector('body').classList.add('no-scroll');
     setShowEditTweetComponent(true);
     setEditTweetIndex(index);
   };
 
   const removeEditTweet = () => {
     console.log('Backdrop clicked!');
-    // document.querySelector('body').classList.remove('no-scroll');
     setShowEditTweetComponent(false);
   };
 
   const confirmEdit = async (newTweet) => {
     removeEditTweet();
-
     const editedTweet = tweets[editTweetIndex];
-    // console.log('EDITED TWEETS');
-    // console.log(editedTweet);
-    // console.log(newTweet);
-
     editedTweet.tweet = newTweet;
-    // console.log(editedTweet);
-
     await fetchEditTweet(editedTweet);
   };
 
@@ -149,73 +113,6 @@ const Home = () => {
             confirmEdit={confirmEdit}
           />
         ) : null}
-
-        {/* <div id="tweets-container">
-          {tweets.map((data) => {
-            return (
-              <Tweet
-                imagePhoto={`images/${data.name}.jpg`}
-                userName={data.name}
-                date={data.date}
-                text={data.tweet}
-                displayNone={data.name == userNameLogin.state ? true : false}
-              />
-            );
-          })} */}
-
-        {/* {async () => {
-            const tweets = await getRandomTweetData();
-            const newTweets = tweets.map((data) => {
-              return (
-                <Tweet
-                  imagePhoto={`images/${data.name}.jpg`}
-                  userName={data.name}
-                  date={data.date}
-                  text={data.tweet}
-                  displayNone={data.name == userNameLogin.state ? true : false}
-                />
-              );
-            });
-
-            return newTweets;
-          }} */}
-
-        {/* <Tweet
-            imagePhoto="images/masbro.jpg"
-            userName="masbro"
-            date="17-02-2023"
-            text="Dweet RISTEK is dope 🔥!"
-            displayNone={false}
-          />
-          <Tweet
-            imagePhoto="images/raisyam.jpg"
-            userName="raisyam"
-            date="17-02-2023"
-            text="keren masbro"
-            displayNone={true}
-          />
-          <Tweet
-            imagePhoto="images/raisyam.jpg"
-            userName="raisyam"
-            date="17-02-2023"
-            text="ada ada aja si masbro"
-            displayNone={true}
-          />
-          <Tweet
-            imagePhoto="images/masbro.jpg"
-            userName="masbro"
-            date="17-02-2023"
-            text="Keren masbro"
-            displayNone={false}
-          />
-          <Tweet
-            imagePhoto="images/raisyam.jpg"
-            userName="raisyam"
-            date="17-02-2023"
-            text="aduh si masbro"
-            displayNone={true}
-          /> */}
-        {/* </div> */}
       </div>
     </div>
   );

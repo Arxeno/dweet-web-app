@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
+import { Link } from 'react-router-dom';
 import CONFIG from '../config';
 import GlobalStateContext from '../context/GlobalStateContext';
-import { Link } from 'react-router-dom';
 
 const UserTweet = ({ id, updateTweetsArray, setErrorMessage }) => {
   const { userNameLogin } = useContext(GlobalStateContext);
@@ -30,15 +30,11 @@ const UserTweet = ({ id, updateTweetsArray, setErrorMessage }) => {
 
       const fullDate = `${dd}-${mm}-${yyyy}`;
 
-      console.log(fullDate);
-
       const body = {
         name: userNameLogin.state.slice(1),
         date: fullDate,
         tweet: userLoginTweet,
       };
-
-      console.log(body);
 
       const options = {
         method: 'POST',
@@ -48,25 +44,17 @@ const UserTweet = ({ id, updateTweetsArray, setErrorMessage }) => {
         body: JSON.stringify(body),
       };
 
-      console.log('posting tweet!');
-      // console.log(`${CONFIG.BACKEND_URL}/tweet/${userName.slice(1)}`);
       fetch(
         `${CONFIG.BACKEND_URL}/tweet/${userNameLogin.state.slice(1)}`,
         options
       )
         .then((res) => {
-          // res.json()
-          console.log(res.status);
-
           if (res.status == 400) {
-            console.error("ERROR! Can't posting tweet");
-          } else {
-            console.log('posting tweet success');
-            // window.location.href = `/login`;
+            alert("ERROR! Can't posting tweet");
           }
         })
         .catch((err) => {
-          console.error("ERROR! Can't posting tweet");
+          alert("ERROR! Can't posting tweet");
         });
 
       updateTweetsArray(body);

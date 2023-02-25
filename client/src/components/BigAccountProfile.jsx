@@ -1,8 +1,7 @@
 import { useContext } from 'react';
-import CONFIG from '../config';
 import GlobalStateContext from '../context/GlobalStateContext';
 
-const BigAccountProfile = ({ imagePhoto, userName }) => {
+const BigAccountProfile = ({ userName }) => {
   const { userNameLoginPhoto } = useContext(GlobalStateContext);
 
   return (

@@ -10,18 +10,6 @@ const Tweet = ({
   removeTweet,
   editThisTweet,
 }) => {
-  // const deleteThisTweet = () => {
-  //   console.log('DELETE this tweet!--------------');
-  //   console.log(`TWEET ID: ${tweetId}`);
-  //   console.log(`USERNAME: ${userName.slice(1)}`);
-
-  //   document.querySelector(`#tweet-${tweetId}`).remove;
-  // };
-
-  // const editThisTweet = () => {
-  //   console.log('edit this tweet');
-  // };
-
   return (
     <div id={`tweet-${tweetId}`} className="tweet shadow-effect">
       <Account imagePhoto={imagePhoto} userName={userName} />

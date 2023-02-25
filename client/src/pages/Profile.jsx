@@ -1,8 +1,7 @@
+import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import BigAccountProfile from '../components/BigAccountProfile';
-import Tweet from '../components/Tweet';
 import Navbar from '../components/Navbar';
-import { useContext, useEffect, useState } from 'react';
 import GlobalStateContext from '../context/GlobalStateContext';
 import Tweets from '../components/Tweets';
 import CONFIG from '../config';
@@ -26,7 +25,6 @@ const Profile = () => {
 
   const { isLogin, userNameLogin, userNameLoginPhoto } =
     useContext(GlobalStateContext);
-  // console.log(`IS LOGIN -> ${isLogin.state}`);
 
   const logOutClick = () => {
     userNameLoginPhoto.setState(null);
@@ -39,16 +37,11 @@ const Profile = () => {
     fetch(`${CONFIG.BACKEND_URL}/tweet/${userName}`, { method: 'GET' })
       .then((response) => response.json())
       .then((responseJson) => {
-        // console.log(responseJson);
         const tweetsFromNewest = responseJson.tweets.reverse();
 
         setTweets(tweetsFromNewest);
-        // setDescription(tweets.description);
-        // console.log('DESC HERE');
-        // console.log(description);
-        // console.log(tweets);
       })
-      .catch((error) => console.error(error));
+      .catch((error) => alert(error));
   };
 
   const getPersonDescriptionData = () => {
@@ -59,15 +52,10 @@ const Profile = () => {
           responseJson.description || `Hi! I am ${userName}! I am using Dweet!`
         );
       })
-      .catch((error) => console.error(error));
+      .catch((error) => alert(error));
   };
 
   const fetchDeleteTweet = async (tweetDeleted) => {
-    console.log('FETCH DELETE TWEET');
-    console.log(
-      `${CONFIG.BACKEND_URL}/tweet/${tweetDeleted.name}?id=${tweetDeleted._id}`
-    );
-
     const options = { method: 'DELETE' };
 
     fetch(
@@ -77,11 +65,6 @@ const Profile = () => {
   };
 
   const removeTweetFromProfile = async (indexDeleted) => {
-    console.log('----------------');
-    console.log('tweet deleted from profile');
-    // console.log(`TWEET ID: ${tweetId}`);
-    // console.log('----------------');
-
     const newTweets = tweets.filter(
       (currentValue, index) => index != indexDeleted
     );
@@ -107,17 +90,12 @@ const Profile = () => {
   };
 
   const editThisTweet = (tweetText, index) => {
-    console.log('edit this tweet');
-    console.log(`TWEET TEXT ${tweetText}`);
     setEditTweetText(tweetText);
-    // document.querySelector('body').classList.add('no-scroll');
     setShowEditTweetComponent(true);
     setEditTweetIndex(index);
   };
 
   const removeEditTweet = () => {
-    console.log('Backdrop clicked!');
-    // document.querySelector('body').classList.remove('no-scroll');
     setShowEditTweetComponent(false);
   };
 
@@ -125,12 +103,8 @@ const Profile = () => {
     removeEditTweet();
 
     const editedTweet = tweets[editTweetIndex];
-    console.log('EDITED TWEETS');
-    // console.log(editedTweet);
-    // console.log(newTweet);
 
     editedTweet.tweet = newTweet;
-    console.log(editedTweet);
 
     await fetchEditTweet(editedTweet);
   };
@@ -172,7 +146,6 @@ const Profile = () => {
   useEffect(() => {
     getPersonTweetData();
     getPersonDescriptionData();
-    // console.log(tweets);
   }, []);
 
   return (
@@ -220,23 +193,6 @@ const Profile = () => {
           removeTweet={(index) => removeTweetFromProfile(index)}
           editTweet={(tweetText, index) => editThisTweet(tweetText, index)}
         />
-
-        {/* <div id="tweets-container">
-          <Tweet
-            imagePhoto="images/masbro.jpg"
-            userName="masbro"
-            date="17-02-2023"
-            text="Dweet RISTEK is dope 🔥!"
-            displayNone={false}
-          />
-          <Tweet
-            imagePhoto="images/masbro.jpg"
-            userName="masbro"
-            date="17-02-2023"
-            text="Keren masbro"
-            displayNone={false}
-          />
-        </div> */}
       </div>
       {showEditTweetComponent ? (
         <EditTweet

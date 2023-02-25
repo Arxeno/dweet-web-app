@@ -8,13 +8,6 @@ const Tweets = ({ tweets, removeTweet, editTweet }) => {
   return (
     <div id="tweets-container">
       {tweets.map((data, index) => {
-        // console.log(`USERNAME LOGIN ${userNameLogin.state.slice(1)}`);
-        // console.log(`DATA.NAME ${data.name}`);
-        // console.log(`CONDITION ${data.name == userNameLogin.state.slice(1)}`);
-        // console.log(`OBJECT ID ${data._id}`);
-        // console.log(typeof data._id);
-        // console.log('---------------------');
-
         return (
           <Tweet
             tweetId={data._id}

@@ -13,18 +13,7 @@ const EditProfilePic = ({ removeThisComponent }) => {
     if (event.target.files[0]) {
       setIsProfilePicEmpty(false);
 
-      // const fileReader = new FileReader();
-      // fileReader.readAsDataURL(event.target.files[0]);
-
-      // fileReader.onload = () => {
-      //   setProfilePicture({
-      //     profilePic: fileReader.result,
-      //     name: userNameLogin.state,
-      //   });
-      // };
-
       setProfilePicture(event.target.files[0]);
-      console.log(event.target.files[0]);
     } else {
       setIsProfilePicEmpty(true);
     }
@@ -32,21 +21,14 @@ const EditProfilePic = ({ removeThisComponent }) => {
 
   const confirmButtonHandlerClick = async () => {
     if (!isProfilePicEmpty) {
-      // alert('yea');
       await postImage();
     }
-    // } else {
-    // alert('no');
-    // }
   };
 
   const postImage = async () => {
     const data = new FormData();
     data.append('profilepic', profilePicture);
     data.append('name', userNameLogin.state.slice(1));
-
-    console.log('DATA');
-    console.log(data);
 
     const options = {
       method: 'POST',
@@ -61,9 +43,6 @@ const EditProfilePic = ({ removeThisComponent }) => {
     userNameLoginPhoto.setState(URL.createObjectURL(profilePicture));
     removeThisComponent();
   };
-
-  console.log('TES EDIT PROFILE PIC');
-  console.log(userNameLogin.state.slice(1));
 
   return (
     <div id="edit-profpic-component">

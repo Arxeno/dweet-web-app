@@ -6,5 +6,6 @@ server/public/assets
 *.dia
 *.dia~
 
+*.txt
 database-structure.txt
 dummy-account.txt

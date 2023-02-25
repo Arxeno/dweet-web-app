@@ -1,27 +1,15 @@
-import { useContext, useEffect, useState } from 'react'; //{useContext, useState} from 'react'
-import UserNameContext from '../context/UserNameContext';
+import { useContext, useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import Account from './Account';
 import GlobalStateContext from '../context/GlobalStateContext';
-import { Navigate } from 'react-router-dom';
-import CONFIG from '../config';
 
 const Navbar = () => {
-  // const {userName, setUserName} = useContext(UserNameContext)\
   const { userNameLogin, userNameLoginPhoto } = useContext(GlobalStateContext);
-  // console.log(`NAMA ${userNameLogin.state}`);
 
   const [goHome, setGoHome] = useState(false);
-  // console.log(`gohome -> ${goHome}`);
   const clickHandlerGoHome = () => {
     setGoHome(true);
   };
-
-  // useEffect(() => {
-  //   userNameLoginPhoto.setState(
-  //     `${CONFIG.BACKEND_URL}/photo/${userNameLogin.state.slice(1)}`
-  //   );
-  //   console.log(userNameLoginPhoto.state);
-  // }, []);
 
   return (
     <nav id="header-nav">

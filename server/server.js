@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const CONFIG = require('./config.js');
 const fs = require('fs');
 const multer = require('multer');
 const bcrypt = require('bcrypt');
+const CONFIG = require('./config.js');
 
 // BCRYPT
 const saltRounds = 10;

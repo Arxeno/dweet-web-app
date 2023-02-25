@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import CONFIG from '../config.js';
 import { Link } from 'react-router-dom';
+import CONFIG from '../config.js';
 
 const SignUp = () => {
   const [userNameState, setUserNameState] = useState('');
@@ -9,19 +9,11 @@ const SignUp = () => {
   const [isUsernameEmpty, setIsUsernameEmpty] = useState(true);
   const [isPasswordEmpty, setIsPasswordEmpty] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
-  // const [isProfilePicEmpty, setIsProfilePicEmpty] = useState(true);
 
   const signUpClick = () => {
     const password = document.querySelector('#signup-password').value;
     const profilePicture =
       document.querySelector('#signup-profilepic').files[0];
-
-    console.log(userNameState);
-    // console.log(typeof userNameState)
-    console.log(password);
-    // console.log(typeof password)
-    console.log(profilePicture);
-    // console.log(typeof profilePicture)
 
     const body = {
       profilePhoto: `${userNameState}.jpg`,
@@ -40,16 +32,6 @@ const SignUp = () => {
     fetch(`${CONFIG.BACKEND_URL}/register`, options)
       .then((response) => {
         return response.json();
-        // console.log('response');
-        // console.log(response);
-
-        // if (response.status == 400) {
-        //   setErrorMessage('This username is already picked!');
-        // } else {
-        //   setErrorMessage('');
-        // alert('Sign Up Success')
-        //   window.location.href = `/login`;
-        // }
       })
       .then(async (responseJson) => {
         if (responseJson.status == 400) {
@@ -71,7 +53,6 @@ const SignUp = () => {
               options
             );
             const responseJson = await response.json();
-            console.log(responseJson);
             window.location.href = '/login';
           }
         }
@@ -79,19 +60,11 @@ const SignUp = () => {
       .catch((err) => {
         console.error('This username is already picked!');
       });
-
-    // console.log('halo')
-    // fetch(`${CONFIG.BACKEND_URL}/tweet`, { method: 'GET' })
-    // 	.then(response => response.json())
-    // 	.then(responseJson => console.log(responseJson))
-    // 	.catch(err => console.error(err))
   };
 
   const usernameChange = (event) => {
     setErrorMessage('');
     const inputUserName = event.target.value || '';
-    // console.log('event target value', event.target.value);
-    // console.log('inputUserName', inputUserName);
 
     // limit username length to 30 characters
     if (inputUserName.length > 30) {
@@ -117,17 +90,7 @@ const SignUp = () => {
     } else {
       setIsPasswordEmpty(true);
     }
-
-    // console.log(document.querySelector('#signup-password').value)
   };
-
-  // const profilePictureChange = () => {
-  //   if (document.querySelector('#signup-profilepic').files[0]) {
-  //     setIsProfilePicEmpty(false);
-  //   } else {
-  //     setIsProfilePicEmpty(true);
-  //   }
-  // };
 
   return (
     <div id="login-signup-page">

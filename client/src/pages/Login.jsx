@@ -1,11 +1,9 @@
 import { useContext, useState } from 'react';
+import { Link, Navigate } from 'react-router-dom';
 import CONFIG from '../config';
 import GlobalStateContext from '../context/GlobalStateContext';
-import { Navigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 
 const LogIn = () => {
-  // { setIsLogIn, setUserNameState }
   const [isLoginError, setIsLoginError] = useState(false);
   const [loginError, setLoginError] = useState('');
   const [isUsernameEmpty, setIsUsernameEmpty] = useState(true);
@@ -13,13 +11,9 @@ const LogIn = () => {
   const { isLogin, userNameLogin, userNameLoginPhoto } =
     useContext(GlobalStateContext);
 
-  // console.log(`IS LOGIN -> ${isLogin.state}`);
-
   const logInClick = () => {
     const userName = document.querySelector('#login-username').value;
     const password = document.querySelector('#login-password').value;
-
-    // alert(userName + password)
 
     const options = {
       method: 'GET',
@@ -28,20 +22,14 @@ const LogIn = () => {
     fetch(`${CONFIG.BACKEND_URL}/users/${userName}/${password}`, options)
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log(responseJson.message);
-
         if (
           responseJson.message == 'Username unavailable' ||
           responseJson.message == 'Wrong password!'
         ) {
-          console.log(responseJson.message);
           setIsLoginError(true);
           setLoginError(responseJson.message);
         } else {
-          console.log(responseJson.message);
           setIsLoginError(false);
-          // setUserNameState(`@${userName}`)
-          // setIsLogIn(true)
           userNameLogin.setState(`@${userName}`);
           userNameLoginPhoto.setState(
             `${CONFIG.BACKEND_URL}/photo/${userName}`
@@ -66,8 +54,6 @@ const LogIn = () => {
     } else {
       setIsPasswordEmpty(true);
     }
-
-    // console.log(document.querySelector('#signup-password').value)
   };
 
   return (
