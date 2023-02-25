@@ -1,19 +1,28 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import UserTweet from '../components/UserTweet';
 import Navbar from '../components/Navbar';
 import CONFIG from '../config';
 import Tweets from '../components/Tweets';
 import EditTweet from '../components/EditTweet';
+import EditCloseFriends from '../components/EditCloseFriends';
+import GlobalStateContext from '../context/GlobalStateContext';
 
 const Home = () => {
   const [tweets, setTweets] = useState([]);
   const [showEditTweetComponent, setShowEditTweetComponent] = useState(false);
+  const [showEditCloseFriendComponent, setShowEditCloseFriendComponent] =
+    useState(false);
   const [editTweetText, setEditTweetText] = useState('');
   const [editTweetIndex, setEditTweetIndex] = useState(-1);
   const [errorMessage, setErrorMessage] = useState('');
 
+  const { userNameLogin } = useContext(GlobalStateContext);
+
   const getRandomTweetData = async () => {
-    fetch(`${CONFIG.BACKEND_URL}/tweet`, { method: 'GET' })
+    fetch(
+      `${CONFIG.BACKEND_URL}/tweet?name=${userNameLogin.state.slice(1)}&mode=closeFriend`,
+      { method: 'GET' }
+    )
       .then((response) => response.json())
       .then((responseJson) => setTweets(responseJson))
       .catch((error) => alert(error));
@@ -81,6 +90,14 @@ const Home = () => {
     await fetchEditTweet(editedTweet);
   };
 
+  const editCloseFriends = () => {
+    setShowEditCloseFriendComponent(true);
+  };
+
+  const removeEditCloseFriends = () => {
+    setShowEditCloseFriendComponent(false);
+  };
+
   useEffect(() => {
     getRandomTweetData();
   }, []);
@@ -93,6 +110,7 @@ const Home = () => {
           id="user-tweet"
           updateTweetsArray={(element) => updateTweetsArray(element)}
           setErrorMessage={setErrorMessage}
+          showEditCloseFriend={editCloseFriends}
         />
 
         {errorMessage ? (
@@ -112,6 +130,10 @@ const Home = () => {
             tweetText={editTweetText}
             confirmEdit={confirmEdit}
           />
+        ) : null}
+
+        {showEditCloseFriendComponent ? (
+          <EditCloseFriends removeThisComponent={removeEditCloseFriends} />
         ) : null}
       </div>
     </div>

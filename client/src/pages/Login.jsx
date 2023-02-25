@@ -34,6 +34,13 @@ const LogIn = () => {
           userNameLoginPhoto.setState(
             `${CONFIG.BACKEND_URL}/photo/${userName}`
           );
+          
+          if (typeof Storage !== undefined) {
+            window.localStorage.setItem(CONFIG.LOCAL_STORAGE_KEY, JSON.stringify({
+              "isLogin": true,
+              "name": userName
+            }))
+          } 
           isLogin.setState(true);
         }
       })

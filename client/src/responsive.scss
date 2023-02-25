@@ -1,0 +1,49 @@
+@media (max-width: 650px) {
+  #user-tweet {
+    grid-template-areas: 'welcome' 'text-area' 'buttons' !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  .tweet {
+    width: 95%;
+    grid-template-areas: 'account edit delete' 'date date date' 'tweet-text tweet-text tweet-text' !important;
+    grid-template-rows: auto auto auto !important;
+    grid-template-columns: 1fr auto auto !important;
+
+    .date {
+      line-height: normal !important;
+    }
+  }
+}
+
+@media (max-width: 524px) {
+  #login-signup-page {
+    min-width: 300px !important;
+    width: 95% !important;
+  }
+
+  #profile-page #profile-buttons-div {
+    grid-template-rows: auto 40px;
+  }
+
+  #edit-close-friend-component #edit-close-friend-box {
+    width: 80%;
+  }
+}
+
+@media (max-width: 450px) {
+  #edit-close-friend-component #edit-close-friend-box {
+    width: 85%;
+  }
+}
+
+@media (max-width: 320px) {
+  nav#header-nav {
+    #nav-title {
+      h1 {
+        font-size: 1.7rem !important;
+        line-height: normal !important;
+      }
+    }
+  }
+}

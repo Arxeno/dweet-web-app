@@ -14,7 +14,7 @@ import './App.scss';
 import './responsive.scss';
 
 const App = () => {
-  const isLogin = useContext(GlobalStateContext).isLogin;
+  const { isLogin } = useContext(GlobalStateContext);
 
   return (
     <Router>

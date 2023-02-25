@@ -3,7 +3,12 @@ import { Link } from 'react-router-dom';
 import CONFIG from '../config';
 import GlobalStateContext from '../context/GlobalStateContext';
 
-const UserTweet = ({ id, updateTweetsArray, setErrorMessage }) => {
+const UserTweet = ({
+  id,
+  updateTweetsArray,
+  setErrorMessage,
+  showEditCloseFriend,
+}) => {
   const { userNameLogin } = useContext(GlobalStateContext);
   const [userLoginTweet, setUserLoginTweet] = useState('');
 
@@ -81,7 +86,10 @@ const UserTweet = ({ id, updateTweetsArray, setErrorMessage }) => {
         value={userLoginTweet}
       ></textarea>
       <div id="user-tweet-buttons">
-        <button className="button-effect button-yellow">
+        <button
+          className="button-effect button-yellow"
+          onClick={showEditCloseFriend}
+        >
           Edit Close Friends <span className="emoji">😁😎</span>
         </button>
         <button className="button-effect button-yellow" onClick={postTweet}>

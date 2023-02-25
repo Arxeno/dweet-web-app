@@ -23,14 +23,16 @@ const Profile = () => {
   const [showChangeProfilePicForm, setShowChangeProfilePicForm] =
     useState(false);
 
-  const { isLogin, userNameLogin, userNameLoginPhoto } =
+  const { isLogin, userNameLogin } =
     useContext(GlobalStateContext);
 
   const logOutClick = () => {
-    userNameLoginPhoto.setState(null);
-    userNameLogin.setState(null);
+    window.localStorage.setItem(CONFIG.LOCAL_STORAGE_KEY, JSON.stringify({
+      isLogin: false,
+      name: null
+    }))
+
     window.location.href = `/login`;
-    isLogin.setState(false);
   };
 
   const getPersonTweetData = async () => {

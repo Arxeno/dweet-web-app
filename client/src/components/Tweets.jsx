@@ -7,7 +7,7 @@ const Tweets = ({ tweets, removeTweet, editTweet }) => {
 
   return (
     <div id="tweets-container">
-      {tweets.map((data, index) => {
+      {tweets.length > 0 ? tweets.map((data, index) => {
         return (
           <Tweet
             tweetId={data._id}
@@ -21,7 +21,7 @@ const Tweets = ({ tweets, removeTweet, editTweet }) => {
             editThisTweet={(tweetText) => editTweet(tweetText, index)}
           />
         );
-      })}
+      }) : <h2 className='no-tweet'>No tweet...<span className="emoji">🕊</span></h2>}
     </div>
   );
 };
