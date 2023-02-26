@@ -32,7 +32,7 @@ const Profile = () => {
       name: null
     }))
 
-    window.location.href = `/login`;
+    window.location.href = '/';
   };
 
   const getPersonTweetData = async () => {
