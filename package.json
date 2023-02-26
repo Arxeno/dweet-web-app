@@ -8,7 +8,9 @@
     "start-dev": "webpack-dev-server --config webpack.dev.js",
     "server": "node server/server.js",
     "dev-server": "nodemon server/server.js",
-    "lint-client": "eslint ./client"
+    "lint-client": "eslint ./client",
+    "install-packages": "npm i",
+    "http-server": "http-server dist"
   },
   "author": "",
   "license": "ISC",
@@ -39,6 +41,7 @@
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "html-webpack-plugin": "^5.5.0",
+    "http-server": "^14.1.1",
     "nodemon": "^2.0.20",
     "sass": "^1.58.1",
     "sass-loader": "^13.2.0",

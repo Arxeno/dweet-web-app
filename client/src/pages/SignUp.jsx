@@ -94,6 +94,9 @@ const SignUp = () => {
 
   return (
     <div id="login-signup-page">
+      <h1 className="login-signup-title">
+        Dweet! <span className="emoji">🦢</span>
+      </h1>
       <div id="login-signup-component" className="shadow-effect">
         <h3>Sign Up</h3>
 

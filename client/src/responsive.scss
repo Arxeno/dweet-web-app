@@ -32,6 +32,10 @@
 }
 
 @media (max-width: 450px) {
+  #login-signup-page #login-signup-component {
+    width: 95%;
+  }
+
   #edit-close-friend-component #edit-close-friend-box {
     width: 85%;
   }

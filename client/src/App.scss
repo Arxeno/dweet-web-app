@@ -350,6 +350,15 @@ nav#header-nav {
   display: grid;
   place-items: center;
   margin: 30px auto;
+  row-gap: 15px;
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -20%);
+
+  .login-signup-title {
+    font-size: 3.5rem;
+  }
 
   #login-signup-component {
     background: white;
@@ -412,6 +421,10 @@ nav#header-nav {
       text-align: center;
       margin-top: 10px;
     }
+  }
+
+  #warning-signup {
+    margin-top: 0;
   }
 }
 

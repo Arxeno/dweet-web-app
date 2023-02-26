@@ -5,18 +5,36 @@ const webLocalStorage = JSON.parse(
   window.localStorage.getItem(CONFIG.LOCAL_STORAGE_KEY)
 );
 
+if (webLocalStorage == null) {
+  window.localStorage.setItem(CONFIG.LOCAL_STORAGE_KEY, JSON.stringify({
+    isLogin: false,
+    name: null
+  }))
+}
+
 const GlobalStateContext = createContext();
 
 const GlobalStateProvider = ({ children }) => {
-  const [isLogin, setIsLogin] = useState(webLocalStorage.isLogin || false);
-  const [userNameLogin, setUserNameLogin] = useState(
-    `@${webLocalStorage.name}` || null
-  );
+
+  const [isLogin, setIsLogin] = useState(() => {
+    if (webLocalStorage != null) {
+      return webLocalStorage.isLogin;
+    }
+    return false;
+  });
+
+  const [userNameLogin, setUserNameLogin] = useState(() => {
+    if (webLocalStorage != null) {
+      return `@${webLocalStorage.name}`;
+    }
+    return null;
+  });
+
   const [userNameLoginPhoto, setUserNameLoginPhoto] = useState(() => {
-    if (webLocalStorage.name) {
+    if (webLocalStorage != null) {
       return `${CONFIG.BACKEND_URL}/photo/${webLocalStorage.name}`;
     }
-    return null
+    return null;
   });
 
   const valueToShare = {
