@@ -9,3 +9,5 @@ server/public/assets
 *.txt
 database-structure.txt
 dummy-account.txt
+
+.env

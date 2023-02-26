@@ -1,9 +1,9 @@
+const CONFIG = require('./config.js');
 const mongoose = require('mongoose');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const multer = require('multer');
-const CONFIG = require('./config.js');
 const { login, register } = require('./controllers/auth.js');
 const {
   giveDescription,
