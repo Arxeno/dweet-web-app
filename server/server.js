@@ -51,7 +51,10 @@ mongoose.set('strictQuery', false);
 const options = { useNewUrlParser: true };
 
 mongoose
-  .connect(`${CONFIG.MONGODB_URL}/${CONFIG.MONGODB_DATABASE}`, options)
+  .connect(
+    `${CONFIG.MONGODB_URL}/${CONFIG.MONGODB_DATABASE}?authSource=admin`,
+    options
+  )
   .then(() => {
     console.log('Connected to MongoDB.');
     // Back end listen
