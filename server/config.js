@@ -1,6 +1,6 @@
 require('dotenv').config()
 
-const MONGO_URL = null;
+let MONGO_URL = null;
 
 if (process.env.MONGOHOST && process.env.MONGOPASSWORD && process.env.MONGOPORT && process.env.MONGOUSER) {
 	const {MONGOHOST, MONGOPASSWORD, MONGOPORT, MONGOUSER} = process.env
